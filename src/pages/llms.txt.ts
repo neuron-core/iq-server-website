@@ -7,7 +7,7 @@ import {
   THROUGHPUT_MULTIPLE,
 } from '../consts/benchmark';
 import { ARCHITECTURES, FRONTEND_PROTOCOLS, LANGUAGES } from '../consts/product';
-import { CONTACT, NAV, PAGES, SITE_NAME } from '../consts/site';
+import { CONTACT, NAV, PAGES, SITE_NAME, SITE_SUMMARY } from '../consts/site';
 import { formatNumber, listAnd, listOr } from '../utils/format';
 
 // /llms.txt, as proposed at llmstxt.org: a Markdown summary of the site for language models.
@@ -23,7 +23,7 @@ export const GET: APIRoute = ({ site }) => {
 
   const body = `# ${SITE_NAME}
 
-> ${SITE_NAME} is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time, over Server-Sent Events.
+> ${SITE_SUMMARY}
 
 - Your backend publishes each chunk of model output over a plain HTTP request, one JSON line per event, from any language: ${listAnd(LANGUAGES)}, or anything that speaks HTTP.
 - Browsers read the stream with the built-in EventSource, with no SDK. IQ relays events exactly as sent, so it works with ${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}.

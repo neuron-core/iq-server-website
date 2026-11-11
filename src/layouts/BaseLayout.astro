@@ -2,7 +2,9 @@
 import '../styles/global.scss';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { SITE_NAME } from '../consts/site';
+import { ARCHITECTURES, LANGUAGES } from '../consts/product';
+import { COVER, SITE_NAME, SITE_SUMMARY } from '../consts/site';
+import { listAnd } from '../utils/format';
 
 interface Props {
   title: string;
@@ -10,6 +12,66 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+const fullTitle = `${SITE_NAME} · ${title}`;
+
+// Absolute URLs on the production domain (`site` in astro.config.mjs), as crawlers and social cards need.
+const absolute = (path: string) => new URL(path, Astro.site).href;
+const homeUrl = absolute('/');
+const pageUrl = absolute(Astro.url.pathname);
+const coverUrl = absolute(COVER.path);
+
+// schema.org graph: the site, the product it describes, and this page within it.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${homeUrl}#website`,
+      url: homeUrl,
+      name: SITE_NAME,
+      description: SITE_SUMMARY,
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${homeUrl}#software`,
+      name: SITE_NAME,
+      url: homeUrl,
+      description: SITE_SUMMARY,
+      image: coverUrl,
+      applicationCategory: 'DeveloperApplication',
+      applicationSubCategory: 'LLM streaming server',
+      operatingSystem: `Docker (${ARCHITECTURES.join(', ')})`,
+      featureList: [
+        'Streams LLM output to browsers over Server-Sent Events, read with the built-in EventSource',
+        'Replay: a browser that reconnects resumes from the exact event it missed',
+        'Multi-tenant: separate credentials, limits and live counters for every app',
+        `Publish from any language over plain HTTP: ${listAnd(LANGUAGES)}`,
+        'No database, Redis, disk or message broker',
+      ],
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${pageUrl}#webpage`,
+      url: pageUrl,
+      name: fullTitle,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@id': `${homeUrl}#website` },
+      about: { '@id': `${homeUrl}#software` },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: coverUrl,
+        width: COVER.width,
+        height: COVER.height,
+      },
+    },
+  ],
+};
+
+// `<` escaped so no string in the data can close the script element.
+const jsonLd = JSON.stringify(structuredData).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -17,9 +79,35 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{`${SITE_NAME} · ${title}`}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <!-- Matches --ink, the header's background. -->
+    <meta name="theme-color" content="#111111" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+
+    <!-- Social preview card: Open Graph, read by most platforms; X reads its own tags below. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={coverUrl} />
+    <meta property="og:image:type" content={COVER.type} />
+    <meta property="og:image:width" content={String(COVER.width)} />
+    <meta property="og:image:height" content={String(COVER.height)} />
+    <meta property="og:image:alt" content={COVER.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={coverUrl} />
+    <meta name="twitter:image:alt" content={COVER.alt} />
+
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
