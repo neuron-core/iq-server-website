@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+// A lifted surface: soft background, hairline border.
+type Props = HTMLAttributes<'div'> & {
+  as?: 'div' | 'article' | 'figure';
+};
+
+const { as: Tag = 'div', class: className, ...attrs } = Astro.props;
+---
+
+<Tag class:list={['panel', className]} data-tone="soft" {...attrs}>
+  <slot />
+</Tag>
+
+<style lang="scss">
+  .panel {
+    padding: var(--s-5);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+
+    @include up(md) {
+      padding: var(--s-6);
+    }
+
+    @include up(lg) {
+      padding: var(--s-7);
+    }
+  }
+</style>

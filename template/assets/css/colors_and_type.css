@@ -1,0 +1,226 @@
+/* =============================================================
+   Reloop · Foundations · v1.1
+   Disciplined greyscale + a single shot of orange.
+   Import once: <link rel="stylesheet" href="colors_and_type.css">
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter+Tight:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---------- Brand color tokens (raw) ---------- */
+  --paper:        #FAFAF9;   /* default background — modern paper, not white */
+  --paper-soft:   #F4F4F2;   /* one step warmer for lifted surfaces */
+  --ink:          #111111;   /* primary text, structure, voice on the page */
+  --ink-soft:     #1C1C1C;   /* hairline shift for layered inks */
+  --graphite:     #3A3A3A;   /* secondary text, body alt, supporting structure */
+  --stone:        #7A7A7A;   /* tertiary text, captions, metadata */
+  --mist:         #E5E5E4;   /* dividers, card edges, subtle backgrounds */
+  --mist-deep:    #D9D9D7;   /* slightly stronger divider when needed */
+
+  /* The one accent. Use as currency, not decoration. */
+  --orange:       #FE6906;
+  --orange-glow:  #FF8A3A;   /* highlight on the gradient CTA */
+  --orange-deep:  #D85402;   /* press / active */
+  --orange-soft:  rgba(254, 105, 6, 0.12); /* the only legal tint, for backgrounds of orange UI */
+
+  /* ---------- Semantic surface + text ---------- */
+  --bg:               var(--paper);
+  --bg-elevated:      var(--paper-soft);
+  --bg-inverse:       var(--ink);
+
+  --fg1:              var(--ink);        /* primary text */
+  --fg2:              var(--graphite);   /* body alt, supporting */
+  --fg3:              var(--stone);      /* captions / metadata */
+  --fg-inverse:       var(--paper);
+  --link:             var(--orange);
+  --link-hover:       var(--orange-deep);
+
+  --border:           var(--mist);
+  --border-strong:    var(--mist-deep);
+  --border-inverse:   rgba(250, 250, 249, 0.14);
+  --rule:             var(--mist);
+
+  /* ---------- Type families ---------- */
+  --serif-display:    "Fraunces", "Georgia", "Times New Roman", serif;
+  --sans-body:        "Inter Tight", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono:             "JetBrains Mono", ui-monospace, SFMono-Regular, "Menlo", monospace;
+
+  /* ---------- Type scale (semantic) ---------- */
+  --t-display:        clamp(56px, 7.4vw, 112px);
+  --t-h1:             clamp(40px, 4.6vw, 72px);
+  --t-h2:             clamp(32px, 3.2vw, 48px);
+  --t-h3:             28px;
+  --t-h4:             22px;
+  --t-lede:           clamp(20px, 1.6vw, 26px);
+  --t-body:           17px;
+  --t-small:          14px;
+  --t-caption:        13px;
+  --t-eyebrow:        12px;
+
+  /* ---------- Spacing (8pt baseline) ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+  --s-11: 160px;
+
+  /* ---------- Radii ----------
+     Precision-first. Geometry stays square so the discipline comes
+     from structure, not from soft corners. */
+  --r-xs:  0;
+  --r-sm:  1px;
+  --r-md:  2px;     /* inputs, code blocks */
+  --r-lg:  2px;     /* cards */
+  --r-xl:  3px;     /* the biggest we go */
+  --r-pill: 2px;    /* legacy alias — buttons are square */
+  --r-dot: 999px;   /* circular dots, status pips, the loop trace */
+
+  /* ---------- Shadow / elevation
+     Neutral shadows, never warm. Low contrast — the paper does the work. */
+  --shadow-hairline: 0 0 0 1px var(--mist);
+  --shadow-card:     0 1px 2px rgba(17, 17, 17, 0.04), 0 6px 18px -8px rgba(17, 17, 17, 0.08);
+  --shadow-lift:     0 2px 4px rgba(17, 17, 17, 0.04), 0 18px 40px -16px rgba(17, 17, 17, 0.14);
+  --shadow-modal:    0 8px 24px rgba(17, 17, 17, 0.08), 0 40px 80px -20px rgba(17, 17, 17, 0.20);
+
+  /* Orange CTA "light-based" system — the one place light catches.
+     Built so the brand book "one orange thing per screen" rule still reads:
+     the gradient sheen is internal, not an additional color introduction. */
+  --shine-top:    rgba(255, 220, 190, 0.55);
+  --shine-bottom: rgba(120, 50, 0, 0.22);
+  --glow:         0 8px 22px -6px rgba(254, 105, 6, 0.42),
+                  0 1px 0 rgba(255, 220, 190, 0.40) inset,
+                  0 -10px 16px -8px rgba(120, 50, 0, 0.40) inset,
+                  0 0 0 1px rgba(216, 84, 2, 0.55);
+  --glow-strong:  0 12px 30px -4px rgba(254, 105, 6, 0.58),
+                  0 1px 0 rgba(255, 230, 200, 0.50) inset,
+                  0 -10px 16px -8px rgba(120, 50, 0, 0.46) inset,
+                  0 0 0 1px rgba(216, 84, 2, 0.62);
+
+  /* ---------- Motion ---------- */
+  --ease-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);     /* default — calm settle */
+  --ease-loop:  cubic-bezier(0.65, 0, 0.35, 1);        /* symmetric, for loops */
+  --dur-1: 120ms;   /* hover, micro */
+  --dur-2: 200ms;   /* press, small state */
+  --dur-3: 360ms;   /* enter / exit */
+  --dur-4: 600ms;   /* hero, big reveal */
+}
+
+/* =============================================================
+   Element defaults
+   ============================================================= */
+html, body {
+  background: var(--bg);
+  color: var(--fg1);
+  font-family: var(--sans-body);
+  font-size: var(--t-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--orange); color: var(--paper); }
+
+h1, h2, h3, h4 {
+  font-family: var(--serif-display);
+  font-weight: 300;
+  color: var(--fg1);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-h1); letter-spacing: -0.025em; }
+h2 { font-size: var(--t-h2); letter-spacing: -0.022em; line-height: 1.05; }
+h3 { font-size: var(--t-h3); letter-spacing: -0.018em; line-height: 1.15; }
+h4 { font-size: var(--t-h4); letter-spacing: -0.012em; line-height: 1.25; font-weight: 400; }
+
+.display {
+  font-family: var(--serif-display);
+  font-weight: 300;
+  font-size: var(--t-display);
+  letter-spacing: -0.03em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.lede {
+  font-family: var(--serif-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: var(--t-lede);
+  line-height: 1.35;
+  color: var(--graphite);
+  max-width: 50ch;
+  text-wrap: pretty;
+}
+
+p  { margin: 0 0 1em; max-width: 65ch; text-wrap: pretty; }
+small { font-size: var(--t-small); color: var(--fg3); }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: var(--t-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--stone);
+  font-weight: 500;
+}
+
+code, kbd, pre, .mono {
+  font-family: var(--mono);
+  font-size: 0.94em;
+  font-feature-settings: "ss01", "cv02";
+}
+code {
+  background: rgba(17, 17, 17, 0.05);
+  padding: 0.12em 0.38em;
+  border-radius: var(--r-sm);
+  color: var(--ink);
+}
+pre {
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--s-5) var(--s-6);
+  border-radius: var(--r-md);
+  overflow-x: auto;
+  line-height: 1.6;
+  font-size: 14px;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color var(--dur-1) var(--ease-quiet);
+}
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--rule);
+  margin: var(--s-6) 0;
+}
+
+/* =============================================================
+   Utility classes (use sparingly)
+   ============================================================= */
+.fg2 { color: var(--fg2); }
+.fg3 { color: var(--fg3); }
+.orange { color: var(--orange); }
+.italic { font-style: italic; }
+.serif { font-family: var(--serif-display); }
+.sans  { font-family: var(--sans-body); }
+.mono  { font-family: var(--mono); }

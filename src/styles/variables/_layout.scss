@@ -1,0 +1,24 @@
+@use '../breakpoints' as *;
+
+:root {
+  --container-max: 1180px;
+  --gutter: var(--s-4);
+
+  // Smallest column an auto-fitting grid allows before it wraps.
+  --col-sm: 200px;
+  --col-md: 320px;
+  --col-lg: 420px;
+
+  // Wide tables scroll sideways below this width.
+  --table-min: 760px;
+
+  // Line lengths
+  --measure-title: 20ch;
+  --measure-lede: 50ch;
+  --measure-text: 65ch;
+  --measure-note: 32ch;
+
+  @include up(md) {
+    --gutter: var(--s-6);
+  }
+}

@@ -1,0 +1,268 @@
+---
+import Block from '../components/Block.astro';
+import Button from '../components/Button.astro';
+import Chips from '../components/Chips.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import FeatureColumns from '../components/FeatureColumns.astro';
+import Grid from '../components/Grid.astro';
+import PageHero from '../components/PageHero.astro';
+import Row from '../components/Row.astro';
+import Rows from '../components/Rows.astro';
+import RuledGrid from '../components/RuledGrid.astro';
+import Section from '../components/Section.astro';
+import Stat from '../components/Stat.astro';
+import DataPath from '../components/home/DataPath.astro';
+import ReplayChart from '../components/home/ReplayChart.astro';
+import SseStream from '../components/home/SseStream.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  COMPETITORS,
+  EVENTS_PER_SECOND,
+  HEADLINE_P99,
+  LOST_ON_RECONNECT,
+  LOST_WITHOUT_REPLAY,
+  MERCURE_HISTORY_PEAK,
+  ONE_CPU,
+  ONE_CPU_SERVERS,
+  REVERB_SHORT,
+  RUN,
+  THROUGHPUT_MULTIPLE,
+  TWO_CPU_MULTIPLE,
+} from '../consts/benchmark';
+import { ARCHITECTURES, FRONTEND_PROTOCOLS, LANGUAGES } from '../consts/product';
+import { CONTACT, PAGES, SITE_NAME } from '../consts/site';
+import { asCode, formatNumber, listAnd, listOr } from '../utils/format';
+
+const oneCpu = formatNumber(EVENTS_PER_SECOND.oneCpu);
+const lightLoad = 100;
+const historyAtLightLoad = ONE_CPU[lightLoad].mercureHistory;
+
+const steps = [
+  {
+    title: 'Publish',
+    text: 'Your backend sends each chunk of model output to IQ as it arrives, over a plain HTTP request, from any language.',
+  },
+  {
+    title: 'Fan out',
+    text: 'IQ fans it out to the browsers watching that answer over Server-Sent Events, the standard the browser already knows. The built-in <code>EventSource</code> is the whole client.',
+  },
+  {
+    title: 'Hold',
+    text: 'While the answer is being generated, IQ keeps it in memory, so any browser that reconnects resumes exactly where it left off.',
+  },
+  {
+    title: 'Let go',
+    text: 'When the answer ends, IQ lets it go. Your backend already has the result. IQ carries it only while it is being written.',
+  },
+];
+
+const savings = [
+  {
+    eyebrow: 'LLM spend',
+    title: 'No more paying twice for the same answer.',
+    text: 'When a stream breaks, users retry, and every retry is another full LLM generation billed by your provider. With replay, the answer they were already paying for simply continues.',
+  },
+  {
+    eyebrow: 'Code',
+    title: 'No reconnection logic to build.',
+    text: 'No buffering tokens in Redis, no “resume from offset” endpoints, no client-side state machines.',
+  },
+  { eyebrow: 'Support', title: 'Fewer support tickets about “the AI stopped mid-sentence”.' },
+];
+
+const contract = [
+  {
+    title: 'Every event, in order, exactly once.',
+    text: 'All browsers watching an answer see the same events in the same order.',
+  },
+  {
+    title: 'A clear ending.',
+    text: 'Each browser receives a final signal: the answer finished, or it failed and why.',
+  },
+  {
+    title: 'An honest “it’s over”.',
+    text: 'A browser that comes back after the answer ended is told so right away, and loads the final result from your backend, instead of hanging or showing half an answer.',
+  },
+  {
+    title: 'Slow devices never slow down others.',
+    text: 'Each browser is served at its own pace. A slow phone never holds back the other viewers, and is never dropped for being slow.',
+  },
+  {
+    title: 'Connections stay alive while the model thinks.',
+    text: 'Regular heartbeats keep proxies and load balancers from closing a stream while an agent waits on a tool.',
+  },
+];
+
+const integration = [
+  {
+    title: 'No SDK required in the browser.',
+    text: 'Standard Server-Sent Events, read by the browser’s built-in <code>EventSource</code>.',
+  },
+  {
+    title: 'Any front-end protocol.',
+    text: `${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}: IQ relays your events exactly as you send them. It never reads or changes what you send.`,
+  },
+  {
+    title: 'Any model, any provider.',
+    text: 'IQ sits after the model, so it works with every LLM, hosted or self-hosted.',
+  },
+  {
+    title: 'Simple, secure tokens.',
+    text: 'Your backend signs short-lived tokens with a few lines of code, in any language: one to publish, one to watch. A watch token can never be used to publish.',
+  },
+  {
+    title: 'One Docker image.',
+    text: `For ${listAnd(asCode(ARCHITECTURES))}. No database, no Redis, no disk and no message broker: everything happens in memory.`,
+  },
+];
+---
+
+<BaseLayout
+  title="Stream LLM tokens to the browser"
+  description={`${SITE_NAME} is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time.`}
+>
+  <PageHero
+    eyebrow={`${SITE_NAME} · one job, done properly`}
+    lead="IQ is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'See the benchmark →', href: PAGES.performance },
+    ]}
+    metrics={[
+      { value: '1', unit: 'CPU', label: 'One process, one core' },
+      { value: oneCpu, unit: '/s', label: 'Events per second' },
+      { value: String(LOST_ON_RECONNECT), label: 'Events lost on reconnect' },
+    ]}
+  >
+    <Fragment slot="title">Stream LLM tokens to the browser. <em>Nothing else.</em> Better than anything else.</Fragment>
+    <p>
+      It delivers {THROUGHPUT_MULTIPLE} times as many events per CPU as general-purpose real-time servers. When a
+      user’s connection drops, IQ picks up exactly where it stopped, and the user never notices.
+    </p>
+    <SseStream slot="aside" />
+  </PageHero>
+
+  <Section
+    id="what"
+    eyebrow={`What ${SITE_NAME} is`}
+    lead="IQ is a streaming server specialized in a single task: relaying LLM output from application backends to browsers."
+  >
+    <Fragment slot="title">Doing one thing is what makes it <em>fast</em>.</Fragment>
+    <RuledGrid slot="aside" items={steps} variant="serif" numbered />
+    <DataPath />
+  </Section>
+
+  <Section id="replay" tone="ink" eyebrow="Stream replay">
+    <Fragment slot="title">The connection will drop. The answer <em>won’t</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        Mobile users change networks. Laptops sleep. Corporate proxies cut idle connections. On a ten-second answer,
+        some of your users will lose their connection mid-stream every day.
+      </p>
+      <p>
+        With IQ, the browser simply reconnects, and <strong>IQ replays exactly the tokens it missed, then continues
+        live</strong>. No gaps, no repeats, nothing for your frontend or backend to rebuild. The browser’s
+        standard <code>EventSource</code> does it on its own: it reconnects and tells IQ the last event it received.
+      </p>
+    </Fragment>
+    <ReplayChart />
+    <Grid min="lg" align="end">
+      <Stat size="lg" value={String(LOST_ON_RECONNECT)} label="Events lost on reconnect" />
+      <p>
+        In the benchmark, {RUN.disconnects} lost its connection mid-answer. Every one of them came back to every event
+        it had missed: <strong>{LOST_ON_RECONNECT} events lost</strong>, at every load level, on one CPU and on two.
+      </p>
+    </Grid>
+  </Section>
+
+  <Section id="why" eyebrow="Why it matters for AI products">
+    <Fragment slot="title">What replay <em>saves you</em>.</Fragment>
+    <FeatureColumns items={savings} />
+    <Block lead="Replay is only half of it. IQ also guarantees that every browser learns how the answer ended, even one that reconnects too late.">
+      <Fragment slot="title">A complete contract for <em>every answer</em>.</Fragment>
+      <RuledGrid items={contract} min="sm" variant="serif" />
+    </Block>
+  </Section>
+
+  <Section id="different" tone="soft" eyebrow="Specialized, not general purpose">
+    <Fragment slot="title">Why general-purpose servers can’t do this at streaming <em>speed</em>.</Fragment>
+    <Block eyebrow="When a browser reconnects mid-answer">
+      <Rows>
+        <Row title={SITE_NAME}>
+          <p>
+            Resumes from the exact event it missed, from memory, at full speed: {oneCpu} events/s on one CPU.
+          </p>
+        </Row>
+        <Row title={`${COMPETITORS.join(', ')} (default)`}>
+          <p>
+            Keep nothing. The browser loses everything sent while it was away: {LOST_WITHOUT_REPLAY.min} to {LOST_WITHOUT_REPLAY.max} events
+            of a {RUN.events}-event run in the benchmark, the middle of the answer.
+          </p>
+        </Row>
+        <Row title={ONE_CPU_SERVERS.mercureHistory}>
+          <p>
+            Can resume, but writes every event to a database file before relaying it. It never
+            passed <strong>{MERCURE_HISTORY_PEAK} events per second</strong>, and at just {lightLoad} concurrent runs
+            its p99 latency was <strong>{Math.floor(historyAtLightLoad.p99Ms / 1000)} seconds</strong>.
+          </p>
+        </Row>
+      </Rows>
+    </Block>
+    <Grid min="lg" align="end">
+      <blockquote>General-purpose servers make you choose: speed without replay, or replay without speed.</blockquote>
+      <Block lead="IQ keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path: no disk, no database, no broker. That is how it resumes a browser within milliseconds of reconnecting while relaying tens of thousands of events per second.">
+        <Button href={PAGES.performance}>Specialization vs general purpose →</Button>
+      </Block>
+    </Grid>
+  </Section>
+
+  <Section
+    tone="ink"
+    lead="IQ runs as a single process on one CPU, or as a cluster that uses every CPU of the machine, and scales with them."
+  >
+    <Fragment slot="title">Performance and <em>scalability</em>.</Fragment>
+    <Block>
+      <Grid min="sm">
+        <Stat value={oneCpu} unit="/s" label="Events relayed on one CPU" accent />
+        <Stat value={String(HEADLINE_P99.ms)} unit="ms" label={`p99 latency at ${HEADLINE_P99.runs} concurrent runs`} />
+        <Stat value={formatNumber(EVENTS_PER_SECOND.twoCpus)} unit="/s" label="Events relayed on two CPUs" />
+        <Stat value={`${TWO_CPU_MULTIPLE.reverb}×`} label={`What ${REVERB_SHORT} moved on the same two CPUs`} />
+      </Grid>
+      <Button href={PAGES.performance}>See the full benchmark →</Button>
+    </Block>
+  </Section>
+
+  <Section id="endpoint" eyebrow="One endpoint for any language">
+    <Fragment slot="title">One endpoint. <em>Any language.</em></Fragment>
+    <Fragment slot="aside">
+      <p>
+        If your backend can make an HTTP request, it can stream through IQ. Publishing is a plain HTTP request with one
+        JSON line per event.
+      </p>
+      <Chips items={LANGUAGES} note="anything that speaks HTTP" />
+    </Fragment>
+    <Grid min="lg">
+      <CodeBlock
+        labels={['in the browser']}
+        description="Browser code: a standard EventSource opened on the watch URL, rendering each message as it arrives."
+      >
+        <div class="tok-c">// standard Server-Sent Events. No SDK.</div>
+        <div><span class="tok-k">const </span>stream<span class="tok-p"> = </span><span class="tok-k">new </span>EventSource<span class="tok-p">(</span>watchUrl<span class="tok-p">);</span></div>
+        <div>stream<span class="tok-p">.</span>onmessage<span class="tok-p"> = (</span>event<span class="tok-p">) =&gt; </span>render<span class="tok-p">(</span>event<span class="tok-p">.</span>data<span class="tok-p">);</span></div>
+      </CodeBlock>
+      <RuledGrid items={integration} />
+    </Grid>
+  </Section>
+
+  <PageHero
+    variant="cta"
+    lead="IQ is the streaming layer AI products should have had from the start: built for tokens, fast on a single CPU, resilient to every dropped connection, and ready to host one app or thousands."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'See the benchmark →', href: PAGES.performance },
+      { label: 'For cloud providers →', href: PAGES.cloud },
+    ]}
+  >
+    <Fragment slot="title">Your model is fast. Make sure your users <em>see it</em>.</Fragment>
+  </PageHero>
+</BaseLayout>

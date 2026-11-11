@@ -1,0 +1,86 @@
+---
+import Button from './Button.astro';
+import Logo from './Logo.astro';
+import { CONTACT, NAV, PAGES, SITE_NAME } from '../consts/site';
+
+const trim = (path: string) => path.replace(/\/$/, '') || '/';
+const current = trim(Astro.url.pathname);
+---
+
+<header class="header" data-tone="ink">
+  <nav class="container header__inner" aria-label="Main">
+    <a class="header__brand" href={PAGES.home} aria-label={`${SITE_NAME} home`}><Logo /></a>
+    <ul class="header__links">
+      {
+        NAV.map(({ href, label }) => (
+          <li>
+            <a href={href} aria-current={trim(href) === current ? 'page' : undefined}>
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <Button href={CONTACT.href} variant="outline" class="header__cta">{CONTACT.label}</Button>
+  </nav>
+</header>
+
+<style lang="scss">
+  .header {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  // Mobile: brand and call to action on top, links underneath.
+  .header__inner {
+    display: grid;
+    grid-template-areas:
+      'brand cta'
+      'links links';
+    align-items: center;
+    gap: var(--s-4) var(--s-6);
+    padding-block: var(--s-4);
+
+    @include up(lg) {
+      grid-template-areas: 'brand links cta';
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+
+  .header__brand {
+    grid-area: brand;
+    text-decoration: none;
+  }
+
+  .header__cta {
+    grid-area: cta;
+    justify-self: end;
+  }
+
+  .header__links {
+    grid-area: links;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+
+    @include up(lg) {
+      justify-content: center;
+    }
+
+    a {
+      font-size: var(--t-small);
+      font-weight: var(--weight-medium);
+      color: var(--fg2);
+      text-underline-offset: var(--s-2);
+
+      &:hover {
+        color: var(--fg1);
+        text-decoration: none;
+      }
+
+      &[aria-current='page'] {
+        color: var(--fg1);
+        text-decoration: underline;
+      }
+    }
+  }
+</style>

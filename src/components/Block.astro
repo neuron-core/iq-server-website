@@ -1,0 +1,36 @@
+---
+// A titled group inside a section body: eyebrow, title and lead above its content.
+interface Props {
+  eyebrow?: string;
+  lead?: string;
+  class?: string;
+}
+
+const { eyebrow, lead, class: className } = Astro.props;
+const hasTitle = Astro.slots.has('title');
+---
+
+<div class:list={['block', className]}>
+  {
+    (eyebrow || hasTitle || lead) && (
+      <div>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {hasTitle && (
+          <h3>
+            <slot name="title" />
+          </h3>
+        )}
+        {lead && <p>{lead}</p>}
+      </div>
+    )
+  }
+  <slot />
+</div>
+
+<style lang="scss">
+  .block {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+</style>

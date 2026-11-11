@@ -1,0 +1,31 @@
+---
+import Block from './Block.astro';
+import Grid from './Grid.astro';
+import Stat from './Stat.astro';
+import { MERCURE, REVERB_SHORT, SOKETI, TWO_CPU_MULTIPLE } from '../consts/benchmark';
+
+interface Props {
+  eyebrow: string;
+  class?: string;
+}
+
+const { eyebrow, class: className } = Astro.props;
+const multiples = [
+  { server: MERCURE, value: TWO_CPU_MULTIPLE.mercure },
+  { server: SOKETI, value: TWO_CPU_MULTIPLE.soketi },
+  { server: REVERB_SHORT, value: TWO_CPU_MULTIPLE.reverb },
+];
+---
+
+<Block eyebrow={eyebrow} class:list={['multiples', className]}>
+  <Grid min="sm">
+    {multiples.map(({ server, value }) => <Stat size="lg" value={`${value}×`} label={`what ${server} did`} />)}
+  </Grid>
+</Block>
+
+<style lang="scss">
+  .multiples {
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--rule);
+  }
+</style>

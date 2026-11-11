@@ -1,0 +1,47 @@
+---
+interface Props {
+  items: string[];
+  /** Unboxed text after the chips. */
+  note?: string;
+  /** Strike the items through: things deliberately left out. */
+  strike?: boolean;
+  class?: string;
+}
+
+const { items, note, strike = false, class: className } = Astro.props;
+---
+
+<ul class:list={['chips', { 'chips--strike': strike }, className]}>
+  {items.map((item) => <li class="chip">{item}</li>)}
+  {note && <li class="chips__note">{note}</li>}
+</ul>
+
+<style lang="scss">
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    font-family: var(--font-mono);
+    font-size: var(--t-eyebrow);
+  }
+
+  .chip,
+  .chips__note {
+    padding: var(--s-2) var(--s-3);
+  }
+
+  .chip {
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    color: var(--fg1);
+
+    .chips--strike & {
+      color: var(--fg2);
+      text-decoration: line-through;
+    }
+  }
+
+  .chips__note {
+    color: var(--fg2);
+  }
+</style>

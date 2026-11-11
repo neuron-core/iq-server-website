@@ -1,0 +1,191 @@
+---
+import { SITE_NAME } from '../../consts/site';
+
+// Illustration: one answer of TOTAL events, with the browser offline for a stretch in the middle.
+const TOTAL = 40;
+const OFFLINE = { from: 16, to: 24 };
+
+type State = 'live' | 'lost' | 'replayed';
+const isOffline = (i: number) => i >= OFFLINE.from && i < OFFLINE.to;
+const events = Array.from({ length: TOTAL }, (_, i) => i);
+const missed = OFFLINE.to - OFFLINE.from;
+
+const rows: { label: string; note?: string; ours?: boolean; state: (i: number) => State }[] = [
+  { label: 'Sent by your backend', state: () => 'live' },
+  {
+    label: 'Browser · general-purpose server',
+    note: 'The middle of the answer is gone',
+    state: (i) => (isOffline(i) ? 'lost' : 'live'),
+  },
+  {
+    label: `Browser · ${SITE_NAME}`,
+    note: 'Every event, in order, exactly once',
+    ours: true,
+    state: (i) => (isOffline(i) ? 'replayed' : 'live'),
+  },
+];
+
+const legend: { state: State; label: string }[] = [
+  { state: 'live', label: 'Delivered live' },
+  { state: 'lost', label: 'Lost while offline' },
+  { state: 'replayed', label: 'Replayed from memory on reconnect' },
+];
+
+const description = `${TOTAL} events of one answer. While the browser is offline, ${missed} events are sent. With a general-purpose server those ${missed} are lost. With IQ they are replayed from memory when the browser reconnects, and the stream continues live.`;
+---
+
+<figure
+  class="replay"
+  role="img"
+  aria-label={description}
+  style={`--offline-from: ${OFFLINE.from / TOTAL}; --offline-span: ${missed / TOTAL}`}
+>
+  <figcaption class="replay__head">
+    <span class="eyebrow">One answer, event by event</span>
+    <span class="replay__axis">first event → last event</span>
+  </figcaption>
+  <div class="replay__rows">
+    <div class="replay__offline">
+      <span class="label">Browser offline</span>
+    </div>
+    {
+      rows.map(({ label, note, ours, state }) => (
+        <div class:list={['replay__row', { 'replay__row--ours': ours }]}>
+          <div class="replay__labels label">
+            <span>{label}</span>
+            {note && <span>{note}</span>}
+          </div>
+          <div class="ticks">
+            {events.map((i) => (
+              <span class={`tick tick--${state(i)}`} />
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <ul class="legend">
+    {
+      legend.map(({ state, label }) => (
+        <li>
+          <span class={`tick tick--${state}`} />
+          {label}
+        </li>
+      ))
+    }
+  </ul>
+</figure>
+
+<style lang="scss">
+  .replay {
+    padding: var(--s-5);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    background: var(--ink-soft);
+
+    @include up(md) {
+      padding: var(--s-6);
+    }
+  }
+
+  .replay__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-5);
+  }
+
+  .replay__axis {
+    font-family: var(--font-mono);
+    font-size: var(--t-eyebrow);
+    color: var(--fg3);
+  }
+
+  // Room above the rows for the "Browser offline" label.
+  .replay__rows {
+    position: relative;
+    display: grid;
+    gap: var(--s-5);
+    margin-top: var(--s-8);
+  }
+
+  .replay__offline {
+    position: absolute;
+    inset-block: calc(var(--s-2) * -1);
+    left: calc(var(--offline-from) * 100%);
+    width: calc(var(--offline-span) * 100%);
+    border-inline: 1px solid var(--paper-a22);
+    background: var(--paper-a04);
+
+    .label {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      translate: -50% 0;
+      padding-bottom: var(--s-2);
+      white-space: nowrap;
+      color: var(--fg1);
+    }
+  }
+
+  // Rows paint after the band, so they sit on top of it.
+  .replay__row {
+    position: relative;
+  }
+
+  .replay__labels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-1) var(--s-4);
+    margin-bottom: var(--s-2);
+
+    .replay__row--ours & {
+      color: var(--fg1);
+    }
+  }
+
+  .ticks {
+    display: flex;
+    gap: var(--s-hair);
+    height: var(--s-5);
+
+    .tick {
+      flex: 1;
+    }
+  }
+
+  .tick--live {
+    background: var(--paper-a86);
+  }
+
+  .tick--lost {
+    background: var(--paper-a14);
+  }
+
+  .tick--replayed {
+    background: var(--accent);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+    font-size: var(--t-caption);
+    color: var(--fg2);
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+
+    .tick {
+      width: var(--s-3);
+      height: var(--s-3);
+    }
+  }
+</style>

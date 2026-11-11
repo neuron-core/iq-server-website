@@ -1,0 +1,61 @@
+---
+// Side-by-side columns between rules, each with an eyebrow and a title.
+export interface Feature {
+  eyebrow: string;
+  title: string;
+  text?: string;
+}
+
+interface Props {
+  items: Feature[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={['features', className]}>
+  {
+    items.map(({ eyebrow, title, text }) => (
+      <div class="feature">
+        <p class="eyebrow">{eyebrow}</p>
+        <h3>{title}</h3>
+        {text && <p class="feature__text">{text}</p>}
+      </div>
+    ))
+  }
+</div>
+
+<style lang="scss">
+  .features {
+    display: grid;
+    border-block: 1px solid var(--rule);
+
+    @include up(lg) {
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+    }
+  }
+
+  .feature {
+    padding: var(--s-6) 0;
+
+    & + & {
+      border-top: 1px solid var(--rule);
+    }
+
+    @include up(lg) {
+      padding: var(--s-7) var(--s-6);
+
+      & + & {
+        border-top: 0;
+        border-left: 1px solid var(--rule);
+      }
+    }
+  }
+
+  .feature__text {
+    max-width: var(--measure-note);
+    font-size: var(--t-body-sm);
+  }
+</style>

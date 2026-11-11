@@ -1,0 +1,118 @@
+---
+import { SITE_NAME } from '../../consts/site';
+---
+
+<div
+  class="path"
+  role="img"
+  aria-label="Data path: your backend publishes over HTTP to IQ, which holds the answer in memory and streams it to browsers over Server-Sent Events."
+>
+  <div class="node" data-tone="soft">
+    <p class="eyebrow">Your backend</p>
+    <p class="node__title">Any language</p>
+    <p class="node__text">Publishes each chunk as the model writes it</p>
+  </div>
+  <div class="link">
+    <span class="label">HTTP · JSON lines</span>
+    <span class="arrow"></span>
+  </div>
+  <div class="node node--iq" data-tone="ink">
+    <p class="eyebrow">{SITE_NAME}</p>
+    <p class="node__title">Holds the answer in memory</p>
+    <p class="node__text">Only while it is being written</p>
+  </div>
+  <div class="link">
+    <span class="label">Server-Sent Events</span>
+    <span class="arrow"></span>
+  </div>
+  <div class="node" data-tone="soft">
+    <p class="eyebrow">Your users’ browsers</p>
+    <p class="node__title">Built-in EventSource</p>
+    <p class="node__text">Resume exactly where they left off</p>
+  </div>
+</div>
+
+<style lang="scss">
+  // Mobile: a vertical flow with arrows pointing down. From lg up: left to right.
+  .path {
+    display: flex;
+    flex-direction: column;
+
+    @include up(lg) {
+      flex-direction: row;
+    }
+  }
+
+  .node {
+    flex: 1 1 0;
+    padding: var(--s-5);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+  }
+
+  .node--iq {
+    box-shadow: var(--shadow-lift);
+  }
+
+  .node__title {
+    margin-top: var(--s-3);
+    font-family: var(--font-display);
+    font-size: var(--t-h4);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-heading);
+    color: var(--fg1);
+  }
+
+  .node__text {
+    margin-top: var(--s-2);
+    font-size: var(--t-small);
+  }
+
+  .link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-3);
+    text-align: center;
+
+    @include up(lg) {
+      justify-content: center;
+      padding-inline: var(--s-4);
+    }
+  }
+
+  // A hairline with a triangular head, drawn with borders.
+  .arrow {
+    position: relative;
+    width: 1px;
+    height: var(--s-6);
+    background: var(--fg1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      translate: -50% 0;
+      border-style: solid;
+      border-color: var(--fg1) transparent transparent;
+      border-width: var(--s-2) var(--s-1) 0;
+    }
+
+    @include up(lg) {
+      width: 100%;
+      height: 1px;
+
+      &::after {
+        top: 50%;
+        right: 0;
+        bottom: auto;
+        left: auto;
+        translate: 0 -50%;
+        border-color: transparent transparent transparent var(--fg1);
+        border-width: var(--s-1) 0 var(--s-1) var(--s-2);
+      }
+    }
+  }
+</style>

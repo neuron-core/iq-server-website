@@ -1,0 +1,281 @@
+---
+import Block from '../components/Block.astro';
+import ClusterMultiples from '../components/ClusterMultiples.astro';
+import Grid from '../components/Grid.astro';
+import PageHero from '../components/PageHero.astro';
+import Panel from '../components/Panel.astro';
+import Row from '../components/Row.astro';
+import Rows from '../components/Rows.astro';
+import RuledGrid from '../components/RuledGrid.astro';
+import Section from '../components/Section.astro';
+import Stat from '../components/Stat.astro';
+import CostTable from '../components/cloud/CostTable.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  CPU_ADVANTAGE,
+  HISTORY_CPU_COST,
+  MERCURE,
+  MERCURE_TWO_CPUS,
+  REVERB_SHORT,
+  SOKETI,
+  TWO_CPU_MULTIPLE,
+} from '../consts/benchmark';
+import { ARCHITECTURES, CUSTOMER_STORES } from '../consts/product';
+import { GENERAL_PURPOSE_LIMIT, PLANS, RUNS_ON_ONE_CPU, SIZING } from '../consts/providers';
+import { CONTACT, PAGES, SITE_NAME } from '../consts/site';
+import { asCode, formatNumber, listAnd, listOr } from '../utils/format';
+
+const architectures = listAnd(asCode(ARCHITECTURES));
+const lightLoad = CPU_ADVANTAGE.atLightLoad.runs;
+
+const savings = [
+  {
+    title: 'Fewer servers.',
+    text: `${CPU_ADVANTAGE.overall.min} to ${CPU_ADVANTAGE.overall.max} times less CPU per event than general-purpose servers, and up to ${TWO_CPU_MULTIPLE.reverb} times more events on the same two CPUs.`,
+  },
+  {
+    title: 'Fewer components.',
+    text: 'No Redis cluster to relay events between nodes, no database for history, no disk to provision, monitor and back up.',
+  },
+  {
+    title: 'Fewer wasted LLM generations.',
+    text: 'Users whose connection dropped get the rest of the answer instead of retrying it, and every avoided retry is a full generation nobody pays for again.',
+  },
+  {
+    title: 'Less code to own.',
+    text: 'Reconnection, ordering, end-of-answer signals and slow-client handling are done.',
+  },
+  {
+    title: 'Lower latency, better product.',
+    text: 'Tokens reach the screen in milliseconds, not seconds, even at peak.',
+  },
+];
+
+const isolation = [
+  {
+    title: 'Separate credentials per app.',
+    text: 'Each app signs its own tokens with its own secret. One app can never publish to, or read, another’s streams.',
+  },
+  {
+    title: 'No noisy neighbours.',
+    text: 'Cap each app’s concurrent answers and memory. An app that hits its limit loses only its own new streams. Every other app keeps streaming as if nothing happened.',
+  },
+  {
+    title: 'Limits per app, per plan.',
+    text: 'Concurrent answers, memory, answer size, maximum duration, viewers per answer, timeouts. Change them in your own database and they apply within a minute, without a restart.',
+  },
+  {
+    title: 'Plug into the customer database you already have.',
+    text: `A JSON file, ${listOr(CUSTOMER_STORES)}, or your own internal service through a small connector. A slow or failing store never takes streaming down: IQ caches answers and keeps serving known apps through a store outage.`,
+  },
+  {
+    title: 'Per-app monitoring without sharing secrets.',
+    text: 'Each app gets a monitoring key that reads only its own live counters (active answers, viewers, memory) and can never publish or read a stream.',
+  },
+  {
+    title: 'Protected by design.',
+    text: 'Fake credentials are rejected before they cost a lookup, and floods of unknown app keys are rate-limited, so a public endpoint stays standing.',
+  },
+];
+
+const operations = [
+  '<strong>Signed releases</strong>, with a software bill of materials (SBOM) and a build provenance record for every platform.',
+  '<strong>Runs as a non-root user</strong>, with read-only application files.',
+  '<strong>Graceful shutdown</strong>: on a rolling deploy, running answers get time to finish before the process exits.',
+  '<strong>Health checks</strong> for load balancers and orchestrators out of the box.',
+  '<strong>Structured JSON logs</strong> that never contain tokens, secrets or the content of your customers’ answers.',
+  '<strong>Mirrorable and air-gap friendly</strong>: copy the image, with its signatures, into a private registry or carry it into an isolated network.',
+  '<strong>One process or every CPU</strong>: a single setting switches between the two modes.',
+].map((text) => ({ text }));
+---
+
+<BaseLayout
+  title="For cloud providers"
+  description={`Offer real-time AI streaming as a managed service with ${SITE_NAME}: multi-tenant by design, replay included, and several times the customers on the same hardware.`}
+>
+  <PageHero
+    eyebrow="For cloud and infrastructure providers"
+    lead="Your customers are building AI products, and every one of them needs to stream tokens to the browser."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'See the numbers →', href: '#margin' },
+    ]}
+    metrics={[
+      { value: `≈ ${formatNumber(RUNS_ON_ONE_CPU)}`, label: 'Concurrent agent runs on one CPU' },
+      { value: `< ${GENERAL_PURPOSE_LIMIT}`, label: 'Where general-purpose servers fall behind' },
+      {
+        value: `≈ ${SIZING.iq.vCpus}`,
+        unit: 'vCPUs',
+        label: `For ${formatNumber(SIZING.concurrentRuns)} concurrent runs, against ≈ ${SIZING.generalPurpose.vCpus}`,
+      },
+      { value: '0', label: 'Brokers, databases or disks in the data path' },
+    ]}
+  >
+    <Fragment slot="title">Offer real-time AI streaming as a managed <em>service</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        Today they assemble it from WebSocket servers, Redis and custom reconnection code, or pay a general-purpose
+        real-time service per message for traffic it was never designed for.
+      </p>
+      <p>
+        IQ lets you offer <strong>LLM streaming as a first-class managed service</strong>: a dedicated endpoint your
+        customers point their backends and browsers at, with replay included and no infrastructure for them to run.
+      </p>
+    </Fragment>
+  </PageHero>
+
+  <Section id="margin" eyebrow="Density is margin">
+    <Fragment slot="title">The same hardware carries several times the <em>customers</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        A service like this is priced per customer and run per CPU. IQ serves
+        around {formatNumber(RUNS_ON_ONE_CPU)} concurrent agent runs on a single CPU, where general-purpose servers fall
+        behind before {GENERAL_PURPOSE_LIMIT}, and the margin per customer grows accordingly.
+      </p>
+      <p>
+        Take an AI product with <strong>{formatNumber(SIZING.concurrentRuns)} agent runs streaming at the same
+        time</strong>, each like the ones in our benchmark: about {SIZING.eventsPerRunPerSecond} events per second,
+        roughly <strong>{formatNumber(SIZING.eventsPerSecond)} events per second</strong> in total.
+      </p>
+    </Fragment>
+    <CostTable>
+      The comparison is generous to the general-purpose server: it uses its best figure, measured at a load where it
+      still kept up, and assumes it scales linearly with CPUs, which the benchmark shows it does not. {MERCURE} gained
+      only {MERCURE_TWO_CPUS.gainFromSecondCpu}× from a second CPU, and {listAnd([SOKETI, REVERB_SHORT])} lost
+      throughput when scaled out. Adding replay to it makes things much worse: with history on, it
+      costs {HISTORY_CPU_COST} times more CPU per event and could not keep up even with {lightLoad} concurrent runs.
+    </CostTable>
+    <ClusterMultiples eyebrow="And it keeps scaling: on the same two CPUs, IQ moved" />
+    <Block eyebrow="Where the savings come from">
+      <RuledGrid items={savings} min="sm" variant="serif" />
+    </Block>
+  </Section>
+
+  <Section id="economics" tone="ink" eyebrow="Why IQ fits a provider’s economics">
+    <Fragment slot="title">Built to be run as a <em>service</em>.</Fragment>
+    <Rows>
+      <Row title="Multi-tenancy is built in, not bolted on.">
+        <p>
+          Per-customer credentials, per-customer limits and per-customer counters come with the server. Plans map
+          directly onto limits, all on the same fleet, changed live from your billing database.
+        </p>
+        <Grid min="sm">
+          {
+            PLANS.map(({ name, concurrentAnswers }) => (
+              <Stat value={formatNumber(concurrentAnswers)} label={`${name} · concurrent answers`} />
+            ))
+          }
+        </Grid>
+      </Row>
+      <Row title="It connects to your platform, not the other way round.">
+        <p>
+          IQ looks up customers in the store you already run ({listOr([...CUSTOMER_STORES, 'an internal API'])}) and
+          caches what it reads. No separate customer database to sync, no extra service to operate.
+        </p>
+      </Row>
+      <Row title="Usage you can meter.">
+        <p>
+          Each customer’s live counters (active answers, connected viewers, memory in use) are available per app, ready
+          to feed dashboards, alerts and usage-based billing.
+        </p>
+      </Row>
+      <Row title="Isolation you can sell.">
+        <p>
+          One customer’s spike cannot take capacity from another. A customer at its limit gets a clear “limit reached”
+          answer for its own new streams, while every other customer keeps streaming.
+        </p>
+      </Row>
+      <Row title="Few moving parts to operate.">
+        <p>
+          No broker, no database, no disk, no cross-node message bus in the data path. A server that keeps nothing on
+          disk upgrades with a rolling restart, and grows with the CPUs you give it.
+        </p>
+      </Row>
+      <Row title="Fits regulated and sovereign clouds.">
+        <p>
+          Signed images, SBOMs, provenance records, non-root execution and air-gapped installation fit the compliance
+          reviews of providers serving finance, healthcare and the public sector. Answer content is never logged or
+          written to disk.
+        </p>
+      </Row>
+    </Rows>
+  </Section>
+
+  <Section id="multi-tenant" eyebrow="Many isolated applications">
+    <Fragment slot="title">Many apps that don’t trust each other, on the <em>same servers</em>.</Fragment>
+    <p slot="aside">
+      IQ can host the streams of many independent applications, belonging to different teams or different customers, on
+      the same servers, safely.
+    </p>
+    <RuledGrid items={isolation} />
+    <Grid min="lg">
+      <Panel as="article">
+        <p class="eyebrow">Single-tenant</p>
+        <h3>One company, one or more apps.</h3>
+        <p>
+          Run IQ next to your application and give it your app’s credentials. Your backend signs a short-lived token for
+          each answer: one to publish, one to watch. The browser gets only the token to watch, and only for that answer.
+        </p>
+      </Panel>
+      <Panel as="article">
+        <p class="eyebrow">Dedicated instance</p>
+        <h3>For customers who want their own.</h3>
+        <p>
+          The same image runs as a single-tenant instance in their account or private cloud, with the same behaviour and
+          the same guarantees.
+        </p>
+      </Panel>
+    </Grid>
+  </Section>
+
+  <Section id="operate" tone="soft" eyebrow="Operate it">
+    <Fragment slot="title">One Docker image. Running in <em>minutes</em>.</Fragment>
+    <p slot="aside">
+      IQ ships as a ready-to-use Docker image for <Fragment set:html={architectures} />. One command starts it. It needs
+      no database, no Redis, no disk and no message broker: everything it does happens in memory.
+    </p>
+    <RuledGrid items={operations} min="lg" />
+  </Section>
+
+  <Section id="faq" eyebrow="FAQ">
+    <Fragment slot="title">Questions providers <em>ask first</em>.</Fragment>
+    <Rows>
+      <Row title="Can one IQ deployment serve many customers?">
+        <p>
+          Yes. Multi-tenancy is built in: separate credentials, separate limits and separate counters for every app, with
+          no customer able to read, write or crowd out another’s streams.
+        </p>
+      </Row>
+      <Row title="Can I run it in my own cloud?">
+        <p>
+          Yes. IQ is a single Docker image for <Fragment set:html={architectures} />, signed and verifiable, that runs
+          anywhere Docker runs, air-gapped networks included.
+        </p>
+      </Row>
+      <Row title="Does IQ store our customers’ conversations?">
+        <p>
+          No. IQ keeps an answer in memory only while it is being generated, so a browser that reconnects can resume.
+          Once the answer ends and the browsers watching it have read it, IQ drops it. It never writes content to disk and
+          never logs it.
+        </p>
+      </Row>
+      <Row title="What happens if IQ restarts mid-answer?">
+        <p>
+          Answers in flight on that process are lost, and browsers are told so explicitly, so the app can load the result
+          from its backend. Planned restarts drain gracefully: running answers get time to finish first.
+        </p>
+      </Row>
+    </Rows>
+  </Section>
+
+  <PageHero
+    variant="cta"
+    lead="The streaming layer AI products should have had from the start: built for tokens, fast on a single CPU, resilient to every dropped connection, and ready to host one app or thousands."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'See the benchmark →', href: PAGES.performance },
+    ]}
+  >
+    <Fragment slot="title">Offer {SITE_NAME} to your <em>customers</em>.</Fragment>
+  </PageHero>
+</BaseLayout>

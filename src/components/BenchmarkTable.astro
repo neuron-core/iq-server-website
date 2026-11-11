@@ -1,0 +1,163 @@
+---
+import type { Load, ServerKey } from '../consts/benchmark';
+import { formatNumber } from '../utils/format';
+
+interface Props {
+  title: string;
+  caption: string;
+  servers: Record<ServerKey, string>;
+  /** Results keyed by number of concurrent runs. */
+  loads: Record<number, Load>;
+  class?: string;
+}
+
+const { title, caption, servers, loads, class: className } = Astro.props;
+const keys = Object.keys(servers) as ServerKey[];
+
+const decimal = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const cpu = (us: number) => `${decimal.format(us)} µs`;
+const latency = (ms: number) => (ms < 1000 ? `${ms} ms` : `${(ms / 1000).toFixed(2)} s`);
+// Two significant digits under 10, as published: 3.0%, 0.90%.
+const percent = (pct: number) => `${pct < 10 && pct !== 0 ? pct.toPrecision(2) : pct}%`;
+const lost = (pct?: number) => (pct === undefined ? '–' : pct === 0 ? '0' : percent(pct));
+---
+
+<div class:list={['bench', className]}>
+  <div class="bench__head">
+    <h3>{title}</h3>
+    <p class="eyebrow">{caption}</p>
+  </div>
+  <div class="bench__scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Concurrent runs</th>
+          <th scope="col">Server</th>
+          <th scope="col">Events delivered</th>
+          <th scope="col">CPU per event</th>
+          <th scope="col">p99 latency</th>
+          <th scope="col">Lost on reconnect</th>
+        </tr>
+      </thead>
+      {
+        Object.entries(loads).map(([runs, results]) => (
+          <tbody>
+            {keys.map((key, index) => {
+              const result = results[key];
+              return (
+                <tr class:list={{ 'is-iq': key === 'iq' }}>
+                  {index === 0 && (
+                    <th scope="rowgroup" rowspan={keys.length}>
+                      {formatNumber(Number(runs))}
+                    </th>
+                  )}
+                  <td>{servers[key]}</td>
+                  <td>{percent(result.delivered)}</td>
+                  <td>{cpu(result.cpuPerEventUs)}</td>
+                  <td>{latency(result.p99Ms)}</td>
+                  <td>{lost(result.lostPct)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        ))
+      }
+    </table>
+  </div>
+  {
+    Astro.slots.has('default') && (
+      <p class="bench__note">
+        <slot />
+      </p>
+    )
+  }
+</div>
+
+<style lang="scss">
+  .bench__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-5);
+    margin-bottom: var(--s-4);
+
+    .eyebrow {
+      margin-top: 0;
+    }
+  }
+
+  .bench__scroll {
+    overflow-x: auto;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  table {
+    width: 100%;
+    min-width: var(--table-min);
+    font-size: var(--t-small);
+  }
+
+  th,
+  td {
+    padding: var(--s-3) var(--s-4);
+    border-bottom: 1px solid var(--rule);
+    text-align: right;
+    color: var(--fg2);
+  }
+
+  thead th {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  // The first two columns (runs, server) read as labels.
+  th:nth-child(-n + 2),
+  td:first-of-type {
+    text-align: left;
+  }
+
+  td {
+    font-family: var(--font-mono);
+    font-size: var(--t-caption);
+  }
+
+  td:first-of-type {
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+  }
+
+  th[scope='rowgroup'] {
+    vertical-align: top;
+    font-family: var(--font-display);
+    font-size: var(--t-h3);
+    font-weight: var(--weight-light);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tracking-heading);
+    color: var(--fg1);
+  }
+
+  tbody tr:last-child td,
+  th[scope='rowgroup'] {
+    border-bottom-color: var(--rule-strong);
+  }
+
+  .is-iq td {
+    background: var(--paper-soft);
+    font-weight: var(--weight-medium);
+    color: var(--fg1);
+  }
+
+  .is-iq td:first-of-type {
+    font-weight: var(--weight-semibold);
+  }
+
+  .bench__note {
+    margin-top: var(--s-4);
+    font-size: var(--t-caption);
+    font-style: italic;
+  }
+</style>

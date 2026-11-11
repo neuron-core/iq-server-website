@@ -1,0 +1,109 @@
+---
+// Short items under a top rule, laid out in as many columns as fit.
+export interface RuledItem {
+  title?: string;
+  /** May contain inline HTML such as <code> or <strong>. */
+  text: string;
+}
+
+interface Props {
+  items: RuledItem[];
+  min?: 'sm' | 'md' | 'lg';
+  /** Serif titles under a strong rule, or sans titles under a hairline. Numbered lists keep the hairline. */
+  variant?: 'serif' | 'sans';
+  numbered?: boolean;
+  class?: string;
+}
+
+const { items, min = 'md', variant = 'sans', numbered = false, class: className } = Astro.props;
+const List = numbered ? 'ol' : 'ul';
+---
+
+<List class:list={['ruled', `ruled--${min}`, `ruled--${variant}`, { 'ruled--numbered': numbered }, className]}>
+  {
+    items.map(({ title, text }) => (
+      <li class="ruled__item">
+        {title && <h3 class="ruled__title">{title}</h3>}
+        <p class="ruled__text" set:html={text} />
+      </li>
+    ))
+  }
+</List>
+
+<style lang="scss">
+  .ruled {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--ruled-min), 100%), 1fr));
+    column-gap: var(--s-5);
+  }
+
+  .ruled--sm {
+    --ruled-min: var(--col-sm);
+  }
+
+  .ruled--md {
+    --ruled-min: var(--col-md);
+  }
+
+  .ruled--lg {
+    --ruled-min: var(--col-lg);
+  }
+
+  .ruled__item {
+    padding-block: var(--s-5);
+    border-top: 1px solid var(--rule);
+
+    .ruled--serif:not(.ruled--numbered) & {
+      border-top-color: var(--rule-strong);
+    }
+  }
+
+  .ruled__title {
+    font-family: var(--font-body);
+    font-size: var(--t-body);
+    font-weight: var(--weight-semibold);
+    line-height: var(--lh-snug);
+    letter-spacing: normal;
+
+    .ruled--serif & {
+      font-family: var(--font-display);
+      font-size: var(--t-h4);
+      font-weight: var(--weight-regular);
+      letter-spacing: var(--tracking-heading);
+    }
+  }
+
+  .ruled__text {
+    font-size: var(--t-body-sm);
+
+    .ruled__title + & {
+      margin-top: var(--s-2);
+    }
+  }
+
+  // Numbered: the counter takes a narrow first column.
+  .ruled--numbered {
+    counter-reset: item;
+
+    .ruled__item {
+      display: grid;
+      grid-template-columns: var(--s-7) minmax(0, 1fr);
+      counter-increment: item;
+
+      &::before {
+        content: counter(item, decimal-leading-zero);
+        grid-row: span 2;
+        padding-top: var(--s-2);
+        font-family: var(--font-mono);
+        font-size: var(--t-eyebrow);
+        letter-spacing: var(--tracking-label);
+        color: var(--fg3);
+      }
+    }
+
+    .ruled__title,
+    .ruled__text {
+      grid-column: 2;
+    }
+  }
+</style>

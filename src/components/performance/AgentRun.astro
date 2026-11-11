@@ -1,0 +1,112 @@
+---
+import Panel from '../Panel.astro';
+import { RUN } from '../../consts/benchmark';
+
+type Part = 'answer' | 'tool' | 'pause' | 'result';
+
+// Illustration: the share of the run's timeline each part takes.
+const timeline: { part: Part; weight: number }[] = [
+  { part: 'answer', weight: 30 },
+  { part: 'tool', weight: 12 },
+  { part: 'pause', weight: 15 },
+  { part: 'result', weight: 6 },
+  { part: 'answer', weight: 37 },
+];
+
+const legend: { part: Part; label: string }[] = [
+  { part: 'answer', label: 'Streamed text answers' },
+  { part: 'tool', label: 'Tool call, streamed arguments' },
+  { part: 'pause', label: `${RUN.toolPauseSeconds} s pause while the tool runs` },
+  { part: 'result', label: `${RUN.toolResultKb} KB tool result` },
+];
+
+const description = `Shape of one simulated agent run: a streamed text answer, a tool call with streamed arguments, a ${RUN.toolPauseSeconds}-second pause, an ${RUN.toolResultKb} KB tool result, then a second streamed answer, about ${RUN.seconds} seconds and ${RUN.events} events in all.`;
+---
+
+<Panel as="figure" role="img" aria-label={description}>
+  <figcaption class="run__head">
+    <span class="eyebrow">One simulated agent run</span>
+    <span class="run__meta">{RUN.events} {RUN.protocol} events · about {RUN.seconds} s</span>
+  </figcaption>
+  <div class="run__bar">
+    {timeline.map(({ part, weight }) => <span class={`swatch swatch--${part}`} style={{ flexGrow: weight }} />)}
+  </div>
+  <ul class="run__legend">
+    {
+      legend.map(({ part, label }) => (
+        <li>
+          <span class={`swatch swatch--${part}`} />
+          {label}
+        </li>
+      ))
+    }
+  </ul>
+</Panel>
+
+<style lang="scss">
+  .run__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-5);
+  }
+
+  .run__meta {
+    font-family: var(--font-mono);
+    font-size: var(--t-eyebrow);
+    color: var(--fg2);
+  }
+
+  .run__bar {
+    display: flex;
+    gap: var(--s-hair);
+    height: var(--s-6);
+    margin-top: var(--s-4);
+
+    .swatch {
+      flex-basis: 0;
+    }
+  }
+
+  .run__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    margin-top: var(--s-4);
+    font-size: var(--t-caption);
+    color: var(--fg2);
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+
+    .swatch {
+      width: var(--s-3);
+      height: var(--s-3);
+    }
+  }
+
+  .swatch {
+    border-radius: var(--r-sm);
+  }
+
+  .swatch--answer {
+    background: var(--ink);
+  }
+
+  .swatch--tool {
+    background: var(--graphite);
+  }
+
+  .swatch--pause {
+    border: 1px solid var(--stone);
+    background: var(--paper);
+  }
+
+  .swatch--result {
+    background: var(--stone);
+  }
+</style>

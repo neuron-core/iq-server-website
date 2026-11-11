@@ -1,0 +1,60 @@
+---
+export type ButtonVariant = 'primary' | 'ghost' | 'outline';
+
+interface Props {
+  href: string;
+  variant?: ButtonVariant;
+  class?: string;
+}
+
+const { href, variant = 'ghost', class: className } = Astro.props;
+const external = /^https?:\/\//.test(href);
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn--${variant}`, className]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  <slot />
+</a>
+
+<style lang="scss">
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    width: fit-content;
+    padding: var(--s-3) var(--s-5);
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+    font-weight: var(--weight-medium);
+    line-height: var(--lh-snug);
+    white-space: nowrap;
+    color: var(--fg1);
+    transition: background-color var(--dur-2) var(--ease-quiet);
+
+    &:hover {
+      color: var(--fg1);
+      text-decoration: none;
+      background: var(--bg-hover);
+    }
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    color: var(--on-accent);
+
+    &:hover {
+      background: var(--accent-hover);
+      color: var(--on-accent);
+    }
+  }
+
+  .btn--outline {
+    border-color: var(--rule-strong);
+  }
+</style>

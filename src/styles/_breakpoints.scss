@@ -1,0 +1,14 @@
+@use 'sass:map';
+
+$breakpoints: (
+  sm: 600px,
+  md: 768px,
+  lg: 1024px,
+);
+
+// Mobile first: styles inside apply from the named breakpoint up.
+@mixin up($name) {
+  @media (min-width: map.get($breakpoints, $name)) {
+    @content;
+  }
+}

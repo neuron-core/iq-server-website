@@ -1,0 +1,155 @@
+---
+import { SITE_NAME } from '../../consts/site';
+import { SIZING } from '../../consts/providers';
+import { formatNumber } from '../../utils/format';
+
+const { iq, generalPurpose: other } = SIZING;
+const cost = (amount: number) => `≈ $${formatNumber(amount)}`;
+
+const rows = [
+  {
+    label: 'CPU per event (measured)',
+    iq: `${Math.round(iq.cpuPerEventUs)} µs`,
+    other: `${Math.round(other.cpuPerEventUs)} µs`,
+  },
+  { label: 'CPUs busy relaying', iq: `≈ ${iq.busyCpus.toFixed(1)}`, other: `≈ ${other.busyCpus.toFixed(1)}` },
+  {
+    label: `vCPUs provisioned at ${SIZING.utilizationPct}% utilization`,
+    iq: `≈ ${iq.vCpus}`,
+    other: `≈ ${other.vCpus}`,
+    strong: true,
+  },
+  {
+    label: `Illustrative cost at $${SIZING.vCpuMonthlyPrice} per vCPU per month`,
+    iq: cost(iq.monthlyCost),
+    other: cost(other.monthlyCost),
+    price: true,
+  },
+  { label: 'Replay on reconnect', iq: 'Included', other: 'Not included', prose: true },
+  {
+    label: 'Redis, database or disk needed',
+    iq: 'None',
+    other: 'None without replay. Disk for every event with it',
+    prose: true,
+  },
+  { label: 'p99 latency at the measured load', iq: `${iq.p99Ms} ms`, other: `${other.p99Ms} ms` },
+];
+---
+
+<div class="cost">
+  <div class="cost__scroll">
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          <th scope="col" class="ours" data-tone="ink">{SITE_NAME}</th>
+          <th scope="col">Fastest general-purpose server tested</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map(({ label, iq, other, strong, price, prose }) => (
+            <tr class:list={{ strong, price, prose }}>
+              <th scope="row">{label}</th>
+              <td class="ours" data-tone="ink">
+                {price ? <><span class="amount">{iq}</span><span class="per">/ month</span></> : iq}
+              </td>
+              <td>{price ? <><span class="amount">{other}</span><span class="per">/ month</span></> : other}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="cost__note"><slot /></p>
+</div>
+
+<style lang="scss">
+  .cost__scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: var(--table-min);
+  }
+
+  th,
+  td {
+    padding: var(--s-4) var(--s-5);
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: middle;
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    font-weight: var(--weight-regular);
+    color: var(--fg2);
+  }
+
+  thead th {
+    padding-block: var(--s-5);
+    vertical-align: bottom;
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+    font-weight: var(--weight-medium);
+    line-height: var(--lh-snug);
+  }
+
+  thead th.ours {
+    font-family: var(--font-display);
+    font-size: var(--t-h3);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-heading);
+    color: var(--fg1);
+  }
+
+  thead tr > *,
+  tbody tr:last-child > * {
+    border-bottom-color: var(--rule-strong);
+  }
+
+  tbody th {
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+  }
+
+  .ours {
+    color: var(--fg1);
+  }
+
+  .strong td {
+    font-weight: var(--weight-medium);
+    color: var(--fg1);
+  }
+
+  .prose td {
+    font-family: var(--font-body);
+    font-size: var(--t-body-sm);
+  }
+
+  .amount {
+    font-family: var(--font-display);
+    font-size: var(--t-stat);
+    font-weight: var(--weight-light);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tracking-display);
+    white-space: nowrap;
+    color: var(--fg1);
+
+    .ours & {
+      color: var(--accent);
+    }
+  }
+
+  .per {
+    margin-left: var(--s-2);
+    font-size: var(--t-eyebrow);
+    color: var(--fg3);
+  }
+
+  .cost__note {
+    max-width: var(--measure-text);
+    margin-top: var(--s-6);
+    font-size: var(--t-body-sm);
+  }
+</style>

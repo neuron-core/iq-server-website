@@ -1,0 +1,40 @@
+---
+import { SITE_NAME } from '../consts/site';
+---
+
+<span class="logo">
+  <svg viewBox="0 0 50 20" aria-hidden="true">
+    <rect x="0" y="10" width="10" height="10"></rect>
+    <rect x="10" y="0" width="10" height="10"></rect>
+    <rect x="20" y="10" width="10" height="10"></rect>
+    <rect x="30" y="0" width="10" height="10"></rect>
+    <rect x="40" y="10" width="10" height="10"></rect>
+  </svg>
+  <span class="logo__word">{SITE_NAME}</span>
+</span>
+
+<style lang="scss">
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+    font-family: var(--font-brand);
+    font-size: var(--t-h4);
+    font-weight: var(--weight-medium);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tracking-heading);
+    color: var(--fg1);
+  }
+
+  svg {
+    height: 0.8em;
+    width: auto;
+
+    // The ramp runs from the background towards the text colour, then the accent.
+    rect:nth-child(1) { fill: var(--logo-1); }
+    rect:nth-child(2) { fill: var(--logo-2); }
+    rect:nth-child(3) { fill: var(--logo-3); }
+    rect:nth-child(4) { fill: var(--logo-4); }
+    rect:nth-child(5) { fill: var(--accent); }
+  }
+</style>

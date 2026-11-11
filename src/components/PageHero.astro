@@ -1,0 +1,175 @@
+---
+import Button, { type ButtonVariant } from './Button.astro';
+import Grid from './Grid.astro';
+import Stat from './Stat.astro';
+
+export interface Action {
+  label: string;
+  href: string;
+  variant?: ButtonVariant;
+}
+
+export interface Metric {
+  value: string;
+  unit?: string;
+  label: string;
+}
+
+interface Props {
+  /** `hero` opens a page; `cta` closes it. */
+  variant?: 'hero' | 'cta';
+  eyebrow?: string;
+  lead?: string;
+  actions: Action[];
+  /** Hero only: a row of figures under the fold line. */
+  metrics?: Metric[];
+  class?: string;
+}
+
+const { variant = 'hero', eyebrow, lead, actions, metrics = [], class: className } = Astro.props;
+const hasAside = Astro.slots.has('aside');
+---
+
+{
+  variant === 'hero' ? (
+    <section class:list={['hero', className]} data-tone="ink">
+      <div class="container">
+        {eyebrow && <p class="eyebrow hero__eyebrow">{eyebrow}</p>}
+        <h1>
+          <slot name="title" />
+        </h1>
+        <div class:list={['hero__main', { 'hero__main--split': hasAside }]}>
+          <div>
+            {lead && <p class="lede">{lead}</p>}
+            <slot />
+            <div class="actions">
+              {actions.map(({ label, href, variant }) => (
+                <Button href={href} variant={variant}>
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </div>
+          {hasAside && (
+            <div>
+              <slot name="aside" />
+            </div>
+          )}
+        </div>
+        {metrics.length > 0 && (
+          <Grid min="sm" class="hero__metrics">
+            {metrics.map((metric) => (
+              <Stat {...metric} />
+            ))}
+          </Grid>
+        )}
+      </div>
+    </section>
+  ) : (
+    <section class:list={['cta', className]} data-tone="soft">
+      <div class="container cta__inner">
+        <div>
+          <h2>
+            <slot name="title" />
+          </h2>
+          {lead && <p>{lead}</p>}
+        </div>
+        <div class="actions actions--stacked">
+          {actions.map(({ label, href, variant }) => (
+            <Button href={href} variant={variant}>
+              {label}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style lang="scss">
+  .hero {
+    padding-block: var(--s-8);
+
+    @include up(lg) {
+      padding-block: var(--s-9);
+    }
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+
+    &::before {
+      content: '';
+      width: 0.5em;
+      height: 0.5em;
+      background: var(--fg1);
+    }
+  }
+
+  .hero__main {
+    margin-top: var(--s-6);
+
+    @include up(lg) {
+      margin-top: var(--s-7);
+    }
+  }
+
+  .hero__main--split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-7) var(--s-8);
+
+    @include up(lg) {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      align-items: start;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+  }
+
+  .hero__metrics {
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--rule);
+
+    @include up(lg) {
+      margin-top: var(--s-9);
+    }
+  }
+
+  .cta {
+    padding-block: var(--s-8);
+    border-top: 1px solid var(--rule);
+
+    @include up(lg) {
+      padding-block: var(--s-9);
+    }
+  }
+
+  .cta__inner {
+    display: grid;
+    gap: var(--s-6) var(--s-7);
+
+    @include up(md) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+
+    h2 {
+      max-width: var(--measure-title);
+    }
+  }
+
+  .actions--stacked {
+    flex-direction: column;
+    gap: var(--s-2);
+    margin-top: 0;
+  }
+</style>

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IQ-Server · For cloud providers</title>
+<meta name="description" content="Offer real-time AI streaming as a managed service with IQ-Server: multi-tenant by design, replay included, and several times the customers on the same hardware.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/colors_and_type.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&amp;family=Inter+Tight:wght@300..700&amp;family=Inter:wght@500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#FAFAF9}
+:where(a){color:#FE6906}:where(a:hover){color:#D85402}
+a.btn-primary{background:#FE6906;box-shadow:none}
+a.btn-primary:hover{background:#D85402;box-shadow:none}
+a.btn-primary::before,a.btn-primary::after{display:none}
+</style>
+</head>
+<body>
+<div style="background: var(--paper); color: var(--ink); font-family: var(--sans-body); min-width: 0;">
+
+<div style="background: var(--ink); color: var(--paper); font-family: var(--sans-body);">
+  <nav class="nav" aria-label="Main" style="position: relative;">
+    <div class="nav-inner" style="flex-wrap: wrap; gap: 14px 32px;">
+      <a class="nav-brand" href="index.html" aria-label="IQ-Server home" style="gap: 14px; text-decoration: none;">
+        <svg width="45" height="18" viewBox="0 0 50 20" aria-hidden="true" style="flex: 0 0 auto;">
+          <rect x="0" y="10" width="10" height="10" fill="#3A3A3A"></rect>
+          <rect x="10" y="0" width="10" height="10" fill="#6B6B6B"></rect>
+          <rect x="20" y="10" width="10" height="10" fill="#A5A5A3"></rect>
+          <rect x="30" y="0" width="10" height="10" fill="#FAFAF9"></rect>
+          <rect x="40" y="10" width="10" height="10" fill="#FE6906"></rect>
+        </svg>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 22px; line-height: 1; letter-spacing: -0.02em; color: var(--paper);">IQ-Server</span>
+      </a>
+      <div class="nav-links" style="flex-wrap: wrap; gap: 10px 28px;">
+        <a href="index.html">Home</a>
+        <a href="performance-scalability.html">Performance and scalability</a>
+        <a href="cloud-providers.html" aria-current="page" style="opacity: 1; text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 1px;">For cloud providers</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-ghost inverse" href="https://form.typeform.com/to/Ba6XOU1t" target="_blank" rel="noopener" style="color: var(--paper); text-decoration: none; box-shadow: inset 0 0 0 1px rgba(250, 250, 249, 0.28);"><span>Talk to us</span></a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<section class="hero" style="padding: 88px 0 96px;">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="pip" style="border-radius: 0;"></span>
+      <span>For cloud and infrastructure providers</span>
+    </div>
+    <h1 style="font-size: clamp(42px, 5.8vw, 84px); margin: 0 0 32px; max-width: 18ch;">Offer real-time AI streaming as a managed <span class="em">service</span>.</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px 64px; align-items: start;">
+      <p class="lede" style="margin: 0;">Your customers are building AI products, and every one of them needs to stream tokens to the browser.</p>
+      <div>
+        <p style="margin: 0 0 18px; font-size: 17px; line-height: 1.6; color: rgba(250, 250, 249, 0.74);">Today they assemble it from WebSocket servers, Redis and custom reconnection code, or pay a general-purpose real-time service per message for traffic it was never designed for.</p>
+        <p style="margin: 0; font-size: 17px; line-height: 1.6; color: rgba(250, 250, 249, 0.74);">IQ lets you offer <span style="color: var(--paper);">LLM streaming as a first-class managed service</span>: a dedicated endpoint your customers point their backends and browsers at, with replay included and no infrastructure for them to run.</p>
+      </div>
+    </div>
+    <div class="hero-actions" style="flex-wrap: wrap; margin-top: 44px;">
+      <a class="btn btn-primary" href="https://form.typeform.com/to/Ba6XOU1t" target="_blank" rel="noopener" style="color: var(--paper); text-decoration: none;"><span>Talk to us</span></a>
+      <a class="btn btn-ghost inverse" href="#margin" style="color: var(--paper); text-decoration: none;"><span>See the numbers →</span></a>
+    </div>
+    <div style="margin-top: 88px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 32px; padding-top: 40px; border-top: 1px solid var(--border-inverse);">
+      <div class="metric">
+        <div class="num">≈ 1,000</div>
+        <div class="label">Concurrent agent runs on one CPU</div>
+      </div>
+      <div class="metric">
+        <div class="num">&lt; 300</div>
+        <div class="label">Where general-purpose servers fall behind</div>
+      </div>
+      <div class="metric">
+        <div class="num">≈ 15<span class="unit">vCPUs</span></div>
+        <div class="label">For 5,000 concurrent runs, against ≈ 62</div>
+      </div>
+      <div class="metric">
+        <div class="num">0</div>
+        <div class="label">Brokers, databases or disks in the data path</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="margin" style="padding: 104px 0;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 32px 80px; align-items: start;">
+      <div>
+        <span class="eyebrow" style="display: block; margin-bottom: 24px; color: var(--graphite);">Density is margin</span>
+        <h2 style="font-size: clamp(36px, 4.4vw, 60px); line-height: 1.02; letter-spacing: -0.025em; margin: 0;">The same hardware carries several times the <em>customers</em>.</h2>
+      </div>
+      <div style="padding-top: 8px;">
+        <p style="margin: 0 0 20px; font-size: 17px; line-height: 1.65; color: var(--graphite);">A service like this is priced per customer and run per CPU. IQ serves around 1,000 concurrent agent runs on a single CPU, where general-purpose servers fall behind before 300, and the margin per customer grows accordingly.</p>
+        <p style="margin: 0; font-size: 17px; line-height: 1.65; color: var(--graphite);">Take an AI product with <span style="color: var(--ink); font-weight: 500;">5,000 agent runs streaming at the same time</span>, each like the ones in our benchmark: about 43 events per second, roughly <span style="color: var(--ink); font-weight: 500;">214,000 events per second</span> in total.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 64px; overflow-x: auto;">
+      <table style="width: 100%; min-width: 680px; border-collapse: separate; border-spacing: 0;">
+        <thead>
+          <tr>
+            <td style="padding: 20px 20px; border-bottom: 1px solid var(--ink);"></td>
+            <th scope="col" style="width: 30%; text-align: left; padding: 24px 24px 20px; background: var(--ink); color: var(--paper); font-family: var(--serif-display); font-weight: 400; font-size: 28px; letter-spacing: -0.02em; border-bottom: 1px solid var(--border-inverse);">IQ-Server</th>
+            <th scope="col" style="width: 30%; text-align: left; padding: 24px 24px 20px; font-family: var(--sans-body); font-weight: 500; font-size: 15px; line-height: 1.35; color: var(--graphite); border-bottom: 1px solid var(--ink); vertical-align: bottom;">Fastest general-purpose server tested</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">CPU per event (measured)</th>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--border-inverse);">49 µs</td>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; color: var(--graphite); border-bottom: 1px solid var(--rule);">203 µs</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">CPUs busy relaying</th>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--border-inverse);">≈ 10.5</td>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; color: var(--graphite); border-bottom: 1px solid var(--rule);">≈ 43.5</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">vCPUs provisioned at 70% utilization</th>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; font-weight: 500; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--border-inverse);">≈ 15</td>
+            <td style="padding: 16px 24px; font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); border-bottom: 1px solid var(--rule);">≈ 62</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 22px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">Illustrative cost at $30 per vCPU per month</th>
+            <td style="padding: 22px 24px; background: var(--ink); color: var(--orange); border-bottom: 1px solid var(--border-inverse); font-family: var(--serif-display); font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.03em; white-space: nowrap;">≈ $450<span style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: rgba(250, 250, 249, 0.62); margin-left: 8px;">/ month</span></td>
+            <td style="padding: 22px 24px; border-bottom: 1px solid var(--rule); font-family: var(--serif-display); font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.03em; color: var(--ink); white-space: nowrap;">≈ $1,860<span style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--graphite); margin-left: 8px;">/ month</span></td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">Replay on reconnect</th>
+            <td style="padding: 16px 24px; font-size: 15px; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--border-inverse);">Included</td>
+            <td style="padding: 16px 24px; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">Not included</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--rule);">Redis, database or disk needed</th>
+            <td style="padding: 16px 24px; font-size: 15px; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--border-inverse);">None</td>
+            <td style="padding: 16px 24px; font-size: 15px; line-height: 1.5; color: var(--graphite); border-bottom: 1px solid var(--rule);">None without replay. Disk for every event with it</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 400; font-size: 15px; color: var(--graphite); border-bottom: 1px solid var(--ink);">p99 latency at the measured load</th>
+            <td style="padding: 16px 24px 20px; font-family: var(--mono); font-size: 14px; background: var(--ink); color: var(--paper);">2.4 ms</td>
+            <td style="padding: 16px 24px 20px; font-family: var(--mono); font-size: 14px; color: var(--graphite); border-bottom: 1px solid var(--ink);">658 ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin: 32px 0 0; font-size: 15px; line-height: 1.65; color: var(--graphite); max-width: 78ch;">The comparison is generous to the general-purpose server: it uses its best figure, measured at a load where it still kept up, and assumes it scales linearly with CPUs, which the benchmark shows it does not. Mercure gained only 1.4× from a second CPU, and Soketi and Reverb lost throughput when scaled out. Adding replay to it makes things much worse: with history on, it costs 2.6 times more CPU per event and could not keep up even with 100 concurrent runs.</p>
+
+    <div style="margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--rule);">
+      <span class="eyebrow" style="display: block; margin-bottom: 28px; color: var(--graphite);">And it keeps scaling: on the same two CPUs, IQ moved</span>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 32px;">
+        <div style="border-left: 1px solid var(--rule); padding: 4px 0 4px 24px;">
+          <div style="font-family: var(--serif-display); font-weight: 300; font-size: clamp(56px, 6vw, 88px); line-height: 1; letter-spacing: -0.035em; color: var(--ink);">9×</div>
+          <div style="margin-top: 12px; font-size: 16px; color: var(--graphite);">what Mercure did</div>
+        </div>
+        <div style="border-left: 1px solid var(--rule); padding: 4px 0 4px 24px;">
+          <div style="font-family: var(--serif-display); font-weight: 300; font-size: clamp(56px, 6vw, 88px); line-height: 1; letter-spacing: -0.035em; color: var(--ink);">17×</div>
+          <div style="margin-top: 12px; font-size: 16px; color: var(--graphite);">what Soketi did</div>
+        </div>
+        <div style="border-left: 1px solid var(--rule); padding: 4px 0 4px 24px;">
+          <div style="font-family: var(--serif-display); font-weight: 300; font-size: clamp(56px, 6vw, 88px); line-height: 1; letter-spacing: -0.035em; color: var(--ink);">35×</div>
+          <div style="margin-top: 12px; font-size: 16px; color: var(--graphite);">what Reverb did</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 88px;">
+      <span class="eyebrow" style="display: block; margin-bottom: 24px; color: var(--graphite);">Where the savings come from</span>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 0 32px;">
+        <div style="padding: 24px 0 8px; border-top: 1px solid var(--ink);">
+          <h3 style="font-size: 22px; font-weight: 400; margin: 0 0 10px;">Fewer servers.</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--graphite);">3.4 to 9 times less CPU per event than general-purpose servers, and up to 35 times more events on the same two CPUs.</p>
+        </div>
+        <div style="padding: 24px 0 8px; border-top: 1px solid var(--ink);">
+          <h3 style="font-size: 22px; font-weight: 400; margin: 0 0 10px;">Fewer components.</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--graphite);">No Redis cluster to relay events between nodes, no database for history, no disk to provision, monitor and back up.</p>
+        </div>
+        <div style="padding: 24px 0 8px; border-top: 1px solid var(--ink);">
+          <h3 style="font-size: 22px; font-weight: 400; margin: 0 0 10px;">Fewer wasted LLM generations.</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--graphite);">Users whose connection dropped get the rest of the answer instead of retrying it, and every avoided retry is a full generation nobody pays for again.</p>
+        </div>
+        <div style="padding: 24px 0 8px; border-top: 1px solid var(--ink);">
+          <h3 style="font-size: 22px; font-weight: 400; margin: 0 0 10px;">Less code to own.</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--graphite);">Reconnection, ordering, end-of-answer signals and slow-client handling are done.</p>
+        </div>
+        <div style="padding: 24px 0 8px; border-top: 1px solid var(--ink);">
+          <h3 style="font-size: 22px; font-weight: 400; margin: 0 0 10px;">Lower latency, better product.</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--graphite);">Tokens reach the screen in milliseconds, not seconds, even at peak.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="economics" style="padding: 104px 0; background: var(--ink); color: var(--paper);">
+  <div class="container">
+    <span class="eyebrow" style="display: block; margin-bottom: 24px; color: rgba(250, 250, 249, 0.62);">Why IQ fits a provider’s economics</span>
+    <h2 style="font-size: clamp(36px, 4.4vw, 60px); line-height: 1.02; letter-spacing: -0.025em; margin: 0 0 56px; color: var(--paper); max-width: 20ch;">Built to be run as a <em>service</em>.</h2>
+    <div style="border-bottom: 1px solid var(--border-inverse);">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">Multi-tenancy is built in, not bolted on.</h3>
+        <div style="flex: 1.7 1 440px;">
+          <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">Per-customer credentials, per-customer limits and per-customer counters come with the server. Plans map directly onto limits, all on the same fleet, changed live from your billing database.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <div style="flex: 1 1 200px; padding: 14px 18px; border: 1px solid var(--border-inverse); border-radius: 2px;">
+              <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250, 250, 249, 0.62); margin-bottom: 6px;">Starter app</div>
+              <div style="font-family: var(--serif-display); font-weight: 300; font-size: 28px; line-height: 1.1; color: var(--paper);">50 <span style="font-family: var(--sans-body); font-size: 14px; color: rgba(250, 250, 249, 0.76);">concurrent answers</span></div>
+            </div>
+            <div style="flex: 1 1 200px; padding: 14px 18px; border: 1px solid var(--border-inverse); border-radius: 2px;">
+              <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250, 250, 249, 0.62); margin-bottom: 6px;">Enterprise app</div>
+              <div style="font-family: var(--serif-display); font-weight: 300; font-size: 28px; line-height: 1.1; color: var(--paper);">5,000 <span style="font-family: var(--sans-body); font-size: 14px; color: rgba(250, 250, 249, 0.76);">concurrent answers</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">It connects to your platform, not the other way round.</h3>
+        <p style="flex: 1.7 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">IQ looks up customers in the store you already run (PostgreSQL, MySQL, Redis, or an internal API) and caches what it reads. No separate customer database to sync, no extra service to operate.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">Usage you can meter.</h3>
+        <p style="flex: 1.7 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">Each customer’s live counters (active answers, connected viewers, memory in use) are available per app, ready to feed dashboards, alerts and usage-based billing.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">Isolation you can sell.</h3>
+        <p style="flex: 1.7 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">One customer’s spike cannot take capacity from another. A customer at its limit gets a clear “limit reached” answer for its own new streams, while every other customer keeps streaming.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">Few moving parts to operate.</h3>
+        <p style="flex: 1.7 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">No broker, no database, no disk, no cross-node message bus in the data path. A server that keeps nothing on disk upgrades with a rolling restart, and grows with the CPUs you give it.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 32px 0; border-top: 1px solid var(--border-inverse);">
+        <h3 style="flex: 1 1 280px; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.018em; line-height: 1.15; color: var(--paper);">Fits regulated and sovereign clouds.</h3>
+        <p style="flex: 1.7 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: rgba(250, 250, 249, 0.76); max-width: none;">Signed images, SBOMs, provenance records, non-root execution and air-gapped installation fit the compliance reviews of providers serving finance, healthcare and the public sector. Answer content is never logged or written to disk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="multi-tenant" style="padding: 104px 0;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 32px 80px; align-items: start;">
+      <div>
+        <span class="eyebrow" style="display: block; margin-bottom: 24px; color: var(--graphite);">Many isolated applications</span>
+        <h2 style="font-size: clamp(36px, 4.4vw, 60px); line-height: 1.02; letter-spacing: -0.025em; margin: 0;">Many apps that don’t trust each other, on the <em>same servers</em>.</h2>
+      </div>
+      <p style="margin: 0; padding-top: 8px; font-size: 17px; line-height: 1.65; color: var(--graphite);">IQ can host the streams of many independent applications, belonging to different teams or different customers, on the same servers, safely.</p>
+    </div>
+
+    <div style="margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 0 48px;">
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--ink);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">Separate credentials per app.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">Each app signs its own tokens with its own secret. One app can never publish to, or read, another’s streams.</p>
+      </div>
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--ink);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">No noisy neighbours.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">Cap each app’s concurrent answers and memory. An app that hits its limit loses only its own new streams. Every other app keeps streaming as if nothing happened.</p>
+      </div>
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--ink);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">Limits per app, per plan.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">Concurrent answers, memory, answer size, maximum duration, viewers per answer, timeouts. Change them in your own database and they apply within a minute, without a restart.</p>
+      </div>
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--rule);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">Plug into the customer database you already have.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">A JSON file, Redis, PostgreSQL or MySQL, or your own internal service through a small connector. A slow or failing store never takes streaming down: IQ caches answers and keeps serving known apps through a store outage.</p>
+      </div>
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--rule);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">Per-app monitoring without sharing secrets.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">Each app gets a monitoring key that reads only its own live counters (active answers, viewers, memory) and can never publish or read a stream.</p>
+      </div>
+      <div style="padding: 28px 0 32px; border-top: 1px solid var(--rule);">
+        <h3 style="font-family: var(--sans-body); font-size: 17px; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin: 0 0 8px;">Protected by design.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--graphite);">Fake credentials are rejected before they cost a lookup, and floods of unknown app keys are rate-limited, so a public endpoint stays standing.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px;">
+      <article style="padding: 36px 40px; background: var(--paper-soft); border: 1px solid var(--rule); border-radius: 2px;">
+        <span class="eyebrow" style="display: block; margin-bottom: 16px; color: var(--graphite);">Single-tenant</span>
+        <h3 style="font-size: 28px; font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 14px;">One company, one or more apps.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.65; color: var(--graphite); max-width: none;">Run IQ next to your application and give it your app’s credentials. Your backend signs a short-lived token for each answer: one to publish, one to watch. The browser gets only the token to watch, and only for that answer.</p>
+      </article>
+      <article style="padding: 36px 40px; background: var(--paper-soft); border: 1px solid var(--rule); border-radius: 2px;">
+        <span class="eyebrow" style="display: block; margin-bottom: 16px; color: var(--graphite);">Dedicated instance</span>
+        <h3 style="font-size: 28px; font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 14px;">For customers who want their own.</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.65; color: var(--graphite); max-width: none;">The same image runs as a single-tenant instance in their account or private cloud, with the same behaviour and the same guarantees.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="operate" style="padding: 104px 0; background: var(--paper-soft); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 32px 80px; align-items: start;">
+      <div>
+        <span class="eyebrow" style="display: block; margin-bottom: 24px; color: var(--graphite);">Operate it</span>
+        <h2 style="font-size: clamp(36px, 4.4vw, 60px); line-height: 1.02; letter-spacing: -0.025em; margin: 0;">One Docker image. Running in <em>minutes</em>.</h2>
+      </div>
+      <p style="margin: 0; padding-top: 8px; font-size: 17px; line-height: 1.65; color: var(--graphite);">IQ ships as a ready-to-use Docker image for <code>amd64</code> and <code>arm64</code>. One command starts it. It needs no database, no Redis, no disk and no message broker: everything it does happens in memory.</p>
+    </div>
+    <ul style="list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 0 64px;">
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Signed releases</span>, with a software bill of materials (SBOM) and a build provenance record for every platform.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Runs as a non-root user</span>, with read-only application files.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Graceful shutdown</span>: on a rolling deploy, running answers get time to finish before the process exits.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Health checks</span> for load balancers and orchestrators out of the box.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Structured JSON logs</span> that never contain tokens, secrets or the content of your customers’ answers.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">Mirrorable and air-gap friendly</span>: copy the image, with its signatures, into a private registry or carry it into an isolated network.</li>
+      <li style="padding: 20px 0; border-top: 1px solid var(--mist-deep); font-size: 16px; line-height: 1.6; color: var(--graphite);"><span style="font-weight: 600; color: var(--ink);">One process or every CPU</span>: a single setting switches between the two modes.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="faq" style="padding: 104px 0;">
+  <div class="container">
+    <span class="eyebrow" style="display: block; margin-bottom: 24px; color: var(--graphite);">FAQ</span>
+    <h2 style="font-size: clamp(34px, 3.8vw, 54px); line-height: 1.04; letter-spacing: -0.024em; margin: 0 0 48px;">Questions providers <em>ask first</em>.</h2>
+    <div style="border-bottom: 1px solid var(--rule);">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 30px 0; border-top: 1px solid var(--ink);">
+        <h3 style="flex: 1 1 320px; margin: 0; font-size: 24px; font-weight: 400; line-height: 1.25; letter-spacing: -0.015em;">Can one IQ deployment serve many customers?</h3>
+        <p style="flex: 1.6 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: var(--graphite); max-width: none;">Yes. Multi-tenancy is built in: separate credentials, separate limits and separate counters for every app, with no customer able to read, write or crowd out another’s streams.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 30px 0; border-top: 1px solid var(--rule);">
+        <h3 style="flex: 1 1 320px; margin: 0; font-size: 24px; font-weight: 400; line-height: 1.25; letter-spacing: -0.015em;">Can I run it in my own cloud?</h3>
+        <p style="flex: 1.6 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: var(--graphite); max-width: none;">Yes. IQ is a single Docker image for <code>amd64</code> and <code>arm64</code>, signed and verifiable, that runs anywhere Docker runs, air-gapped networks included.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 30px 0; border-top: 1px solid var(--rule);">
+        <h3 style="flex: 1 1 320px; margin: 0; font-size: 24px; font-weight: 400; line-height: 1.25; letter-spacing: -0.015em;">Does IQ store our customers’ conversations?</h3>
+        <p style="flex: 1.6 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: var(--graphite); max-width: none;">No. IQ keeps an answer in memory only while it is being generated, so a browser that reconnects can resume. Once the answer ends and the browsers watching it have read it, IQ drops it. It never writes content to disk and never logs it.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 64px; padding: 30px 0; border-top: 1px solid var(--rule);">
+        <h3 style="flex: 1 1 320px; margin: 0; font-size: 24px; font-weight: 400; line-height: 1.25; letter-spacing: -0.015em;">What happens if IQ restarts mid-answer?</h3>
+        <p style="flex: 1.6 1 440px; margin: 0; font-size: 16px; line-height: 1.65; color: var(--graphite); max-width: none;">Answers in flight on that process are lost, and browsers are told so explicitly, so the app can load the result from its backend. Planned restarts drain gracefully: running answers get time to finish first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" style="padding: 104px 0;">
+  <div class="container cta-inner" style="align-items: flex-end;">
+    <div style="min-width: 0;">
+      <h2 style="max-width: 20ch;">Offer IQ-Server to your <span class="em">customers</span>.</h2>
+      <p style="margin: 24px 0 0; font-size: 17px; line-height: 1.65; color: var(--graphite); max-width: 56ch;">The streaming layer AI products should have had from the start: built for tokens, fast on a single CPU, resilient to every dropped connection, and ready to host one app or thousands.</p>
+    </div>
+    <div class="cta-actions" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+      <a class="btn btn-primary" href="https://form.typeform.com/to/Ba6XOU1t" target="_blank" rel="noopener" style="color: var(--paper); text-decoration: none;"><span>Talk to us</span></a>
+      <a class="btn btn-ghost" href="performance-scalability.html" style="color: var(--ink); text-decoration: none;"><span>See the benchmark →</span></a>
+    </div>
+  </div>
+</section>
+
+<div style="background: var(--paper); color: var(--ink); font-family: var(--sans-body);">
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <a class="footer-brand" href="index.html" aria-label="IQ-Server home" style="gap: 12px; text-decoration: none;">
+            <svg width="40" height="16" viewBox="0 0 50 20" aria-hidden="true" style="flex: 0 0 auto;">
+              <rect x="0" y="10" width="10" height="10" fill="#CFCFCD"></rect>
+              <rect x="10" y="0" width="10" height="10" fill="#9B9B99"></rect>
+              <rect x="20" y="10" width="10" height="10" fill="#5C5C5A"></rect>
+              <rect x="30" y="0" width="10" height="10" fill="#111111"></rect>
+              <rect x="40" y="10" width="10" height="10" fill="#FE6906"></rect>
+            </svg>
+            <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 20px; line-height: 1; letter-spacing: -0.02em; color: var(--ink);">IQ-Server</span>
+          </a>
+          <p class="footer-tag" style="color: var(--graphite);">The streaming layer AI products should have had from the start. Built for tokens.</p>
+        </div>
+        <nav class="footer-col" aria-label="Website">
+          <h4 style="color: var(--graphite);">Website</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="performance-scalability.html">Performance and scalability</a></li>
+            <li><a href="cloud-providers.html">For cloud providers</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-label="Contact">
+          <h4 style="color: var(--graphite);">Contact</h4>
+          <ul>
+            <li><a href="https://form.typeform.com/to/Ba6XOU1t" target="_blank" rel="noopener">Talk to us ↗</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom" style="color: var(--graphite); flex-wrap: wrap; gap: 8px 24px;">
+        <span>IQ-Server · LLM streaming server</span>
+        <span>amd64 · arm64 · signed releases</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</div>
+</body>
+</html>

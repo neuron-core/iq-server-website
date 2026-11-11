@@ -1,0 +1,72 @@
+---
+// A dark code figure. Lines go in the slot as <div>s; colour tokens with
+// .tok-k (keyword), .tok-p (punctuation) and .tok-c (comment).
+interface Props {
+  labels: string[];
+  /** What the figure shows, read out instead of the code. */
+  description: string;
+  class?: string;
+}
+
+const { labels, description, class: className } = Astro.props;
+---
+
+<figure class:list={['code', className]} data-tone="ink" role="img" aria-label={description}>
+  <figcaption class="code__head">
+    {labels.map((label) => <span>{label}</span>)}
+  </figcaption>
+  <div class="code__body">
+    <slot />
+  </div>
+</figure>
+
+<style lang="scss">
+  .code {
+    min-width: 0;
+    padding: var(--s-5);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-lift);
+    font-family: var(--font-mono);
+    font-size: var(--t-caption);
+    line-height: var(--lh-code);
+
+    @include up(md) {
+      padding: var(--s-5) var(--s-6);
+    }
+  }
+
+  .code__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-4);
+    padding-bottom: var(--s-4);
+    margin-bottom: var(--s-4);
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--t-eyebrow);
+    color: var(--fg3);
+
+    span:first-child {
+      color: var(--fg1);
+    }
+  }
+
+  // Lines never wrap; narrow screens scroll them sideways.
+  .code__body {
+    overflow-x: auto;
+    white-space: nowrap;
+
+    :global(.tok-k) {
+      color: var(--orange-glow);
+    }
+
+    :global(.tok-p) {
+      color: var(--fg3);
+    }
+
+    :global(.tok-c) {
+      font-style: italic;
+      color: var(--fg3);
+    }
+  }
+</style>

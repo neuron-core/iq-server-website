@@ -1,0 +1,94 @@
+---
+interface Props {
+  id?: string;
+  tone?: 'paper' | 'soft' | 'ink';
+  eyebrow?: string;
+  /** Italic lede under the title. */
+  lead?: string;
+  class?: string;
+}
+
+const { id, tone = 'paper', eyebrow, lead, class: className } = Astro.props;
+const hasTitle = Astro.slots.has('title');
+const hasAside = Astro.slots.has('aside');
+const hasHead = Boolean(eyebrow || hasTitle || lead);
+---
+
+<section id={id} class:list={['section', className]} data-tone={tone}>
+  <div class="container">
+    {
+      hasHead && (
+        <div class:list={['section__head', { 'section__head--split': hasAside }]}>
+          <div>
+            {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+            {hasTitle && (
+              <h2>
+                <slot name="title" />
+              </h2>
+            )}
+            {lead && <p class="lede">{lead}</p>}
+          </div>
+          {hasAside && (
+            <div>
+              <slot name="aside" />
+            </div>
+          )}
+        </div>
+      )
+    }
+    {
+      Astro.slots.has('default') && (
+        <div class="section__body">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style lang="scss">
+  .section {
+    padding-block: var(--s-8);
+
+    @include up(lg) {
+      padding-block: var(--s-9);
+    }
+
+    &[data-tone='soft'] {
+      border-block: 1px solid var(--rule);
+    }
+  }
+
+  h2 {
+    max-width: var(--measure-title);
+  }
+
+  // The aside sits beside the title from lg up.
+  .section__head--split {
+    display: grid;
+    gap: var(--s-5) var(--s-8);
+
+    @include up(lg) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  // minmax(0, 1fr) lets wide tables and code scroll inside their block instead of widening the page.
+  .section__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-8);
+
+    @include up(lg) {
+      gap: var(--s-9);
+    }
+  }
+
+  .section__head + .section__body {
+    margin-top: var(--s-7);
+
+    @include up(lg) {
+      margin-top: var(--s-8);
+    }
+  }
+</style>

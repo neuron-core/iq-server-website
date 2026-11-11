@@ -1,0 +1,46 @@
+---
+// Equal columns that wrap on their own: one per row on phones, as many as fit above.
+interface Props {
+  /** Smallest column width before wrapping. */
+  min?: 'sm' | 'md' | 'lg';
+  align?: 'start' | 'end';
+  class?: string;
+}
+
+const { min = 'md', align = 'start', class: className } = Astro.props;
+---
+
+<div class:list={['grid', `grid--${min}`, `grid--${align}`, className]}>
+  <slot />
+</div>
+
+<style lang="scss">
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min), 100%), 1fr));
+    gap: var(--s-6) var(--grid-gap);
+  }
+
+  .grid--sm {
+    --grid-min: var(--col-sm);
+    --grid-gap: var(--s-6);
+  }
+
+  .grid--md {
+    --grid-min: var(--col-md);
+    --grid-gap: var(--s-7);
+  }
+
+  .grid--lg {
+    --grid-min: var(--col-lg);
+    --grid-gap: var(--s-8);
+  }
+
+  .grid--start {
+    align-items: start;
+  }
+
+  .grid--end {
+    align-items: end;
+  }
+</style>

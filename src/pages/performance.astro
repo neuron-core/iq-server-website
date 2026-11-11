@@ -1,0 +1,243 @@
+---
+import BenchmarkTable from '../components/BenchmarkTable.astro';
+import Block from '../components/Block.astro';
+import Chips from '../components/Chips.astro';
+import ClusterMultiples from '../components/ClusterMultiples.astro';
+import FeatureColumns from '../components/FeatureColumns.astro';
+import Grid from '../components/Grid.astro';
+import PageHero from '../components/PageHero.astro';
+import Panel from '../components/Panel.astro';
+import Section from '../components/Section.astro';
+import Stat from '../components/Stat.astro';
+import AgentRun from '../components/performance/AgentRun.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  BEST_GENERAL_PURPOSE_AT_1000,
+  COMPETITORS,
+  CPU_ADVANTAGE,
+  DELIVERY_THRESHOLD,
+  EVENTS_PER_SECOND,
+  HEADLINE_P99,
+  LOST_ON_RECONNECT,
+  MACHINE,
+  MEMORY,
+  MERCURE,
+  MERCURE_TWO_CPUS,
+  ONE_CPU,
+  ONE_CPU_SERVERS,
+  REVERB,
+  REVERB_SHORT,
+  RUN,
+  SOKETI,
+  THROUGHPUT_MULTIPLE,
+  TWO_CPU_SERVERS,
+  TWO_CPUS,
+} from '../consts/benchmark';
+import { LEFT_OUT } from '../consts/product';
+import { CONTACT, PAGES, SITE_NAME } from '../consts/site';
+import { formatNumber, listAnd } from '../utils/format';
+
+const oneCpu = formatNumber(EVENTS_PER_SECOND.oneCpu);
+const twoCpus = formatNumber(EVENTS_PER_SECOND.twoCpus);
+const heavyLoad = 1000;
+const lightLoad = CPU_ADVANTAGE.atLightLoad.runs;
+const perEvent = (runs: keyof typeof ONE_CPU) => Math.round(ONE_CPU[runs].iq.cpuPerEventUs);
+const memoryPerRun = `${MEMORY.perRunKib.min}–${MEMORY.perRunKib.max}`;
+
+const symptoms = [
+  {
+    eyebrow: '01 · CPU',
+    title: 'It runs out of CPU long before you expect.',
+    text: 'Every token pays the full price of a message built for a different job.',
+  },
+  {
+    eyebrow: '02 · Latency',
+    title: 'Latency piles up.',
+    text: 'Once the server falls behind, tokens arrive in bursts, seconds late, and the “typing” effect your users expect falls apart.',
+  },
+  {
+    eyebrow: '03 · Reconnects',
+    title: 'Dropped connections lose tokens.',
+    text: 'The browser reconnects and the middle of the answer is gone. The user sees a broken answer, retries, and you pay the LLM provider to generate it again.',
+  },
+];
+---
+
+<BaseLayout
+  title="Performance and scalability"
+  description={`${SITE_NAME} benchmarked against ${listAnd(COMPETITORS)} on the exact traffic an AI product generates: throughput, latency, scaling and replay.`}
+>
+  <PageHero
+    eyebrow="Performance and scalability"
+    lead="IQ was benchmarked against three of the best-known real-time servers on the exact traffic an AI product generates."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'How we measured →', href: '#benchmark' },
+    ]}
+    metrics={[
+      { value: oneCpu, unit: '/s', label: 'Events on one CPU' },
+      { value: twoCpus, unit: '/s', label: 'Events on two CPUs' },
+      { value: String(HEADLINE_P99.ms), unit: 'ms', label: `p99 latency at ${HEADLINE_P99.runs} runs` },
+      { value: String(LOST_ON_RECONNECT), label: 'Events lost on reconnect' },
+    ]}
+  >
+    <Fragment slot="title">
+      More than {THROUGHPUT_MULTIPLE}× the throughput of general-purpose servers, on the <em>same CPU</em>.
+    </Fragment>
+  </PageHero>
+
+  <Section id="one-cpu" eyebrow="The test">
+    <Fragment slot="title">The exact traffic an AI product <em>generates</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        Simulated agent runs, each made of {RUN.events} {RUN.protocol} events over about {RUN.seconds} seconds.
+        Each run has a streamed text answer, a tool call with
+        streamed arguments, a {RUN.toolPauseSeconds}-second pause while the tool runs, an {RUN.toolResultKb} KB tool
+        result, and a second answer, with runs starting and ending all the time and {RUN.disconnects} losing its connection
+        mid-answer.
+      </p>
+      <p><strong>Each server ran alone, on the same CPU and memory, in its fastest configuration.</strong></p>
+    </Fragment>
+    <AgentRun />
+    <BenchmarkTable title="One CPU" caption={`IQ vs ${COMPETITORS.join(', ')}`} servers={ONE_CPU_SERVERS} loads={ONE_CPU}>
+      “Lost on reconnect” is left out (–) for servers that delivered under {DELIVERY_THRESHOLD}%: that far behind, the
+      backlog hides it.
+    </BenchmarkTable>
+  </Section>
+
+  <Section tone="ink">
+    <Fragment slot="title">What the numbers <em>say</em>.</Fragment>
+    <Grid min="sm">
+      <Stat value={oneCpu} unit="/s" label="Events relayed on one CPU" accent>
+        A thousand agent runs at once. The best any general-purpose server reached was
+        about {formatNumber(BEST_GENERAL_PURPOSE_AT_1000.eventsPerSecond)}, with its tokens arriving more
+        than {BEST_GENERAL_PURPOSE_AT_1000.secondsLate} seconds late.
+      </Stat>
+      <Stat value={String(HEADLINE_P99.ms)} unit="ms" label={`p99 latency at ${HEADLINE_P99.runs} runs`}>
+        None of the general-purpose servers keeps up with {HEADLINE_P99.runs} concurrent runs. IQ delivers every event.
+      </Stat>
+      <Stat value={`${CPU_ADVANTAGE.atLightLoad.min}×`} label={`Less CPU per event at ${lightLoad} runs`}>
+        Where two of them still keep up, IQ uses {CPU_ADVANTAGE.atLightLoad.min} to {CPU_ADVANTAGE.atLightLoad.max} times
+        less CPU per event, with a p99 under one millisecond
+        against {ONE_CPU[lightLoad].mercure.p99Ms} and {ONE_CPU[lightLoad].soketi.p99Ms} ms.
+      </Stat>
+      <Stat value={String(perEvent(heavyLoad))} unit="µs" label={`Per event at ${formatNumber(heavyLoad)} runs`}>
+        IQ gets cheaper per event as it gets busier, from {perEvent(lightLoad)} µs to {perEvent(heavyLoad)} µs, because
+        each turn of its event loop relays more events at once.
+      </Stat>
+    </Grid>
+  </Section>
+
+  <Section id="cluster" eyebrow="Scalability">
+    <Fragment slot="title">From one CPU to <em>every CPU</em> of the machine.</Fragment>
+    <p slot="aside">
+      IQ runs as a single process on one CPU, or as a cluster that uses every CPU of the machine: one worker per CPU,
+      with a lightweight router in front. Each answer lives on one worker, so its tokens go straight from your backend
+      to your users’ browsers, never crossing processes and never passing through a broker.
+    </p>
+    <BenchmarkTable
+      title="Two CPUs"
+      caption={`${listAnd([REVERB_SHORT, SOKETI])} scaled out with Redis`}
+      servers={TWO_CPU_SERVERS}
+      loads={TWO_CPUS}
+    />
+    <Grid min="lg">
+      <div>
+        <h3>IQ scales with its CPUs.</h3>
+        <p>
+          On two CPUs it delivered about {twoCpus} events per second, while its cost per event stayed the same as on one.
+        </p>
+      </div>
+      <div>
+        <h3>General-purpose servers do not.</h3>
+        <p>
+          {MERCURE} reached about {formatNumber(MERCURE_TWO_CPUS.eventsPerSecond)} events per second on two
+          CPUs. {listAnd([SOKETI, REVERB_SHORT])}, scaled out the way their documentation describes,
+          delivered <em>fewer</em> events than on one CPU, at two to four times the CPU per event, because every event
+          has to cross Redis to reach the right process.
+        </p>
+      </div>
+    </Grid>
+    <ClusterMultiples eyebrow="On the same two CPUs, IQ moved" />
+    <Panel>
+      <Grid min="lg">
+        <div>
+          <p class="eyebrow">Memory</p>
+          <h3>Light on <em>memory</em>.</h3>
+          <p>
+            A whole agent run, kept in full so any browser can resume it, costs IQ about {memoryPerRun} KiB.
+            A {MEMORY.containerGb} GB container holds about {formatNumber(MEMORY.answers)} complete {formatNumber(MEMORY.tokensPerAnswer)}-token
+            answers in flight at once. IQ sizes itself from its container’s
+            memory limit and refuses new work before it runs out, so a traffic spike never crashes the process and the
+            answers already running.
+          </p>
+        </div>
+        <Grid min="sm">
+          <Stat value={memoryPerRun} unit="KiB" label="Per agent run, kept in full" />
+          <Stat
+            value={formatNumber(MEMORY.answers)}
+            label={`${formatNumber(MEMORY.tokensPerAnswer)}-token answers in a ${MEMORY.containerGb} GB container`}
+          />
+        </Grid>
+      </Grid>
+    </Panel>
+  </Section>
+
+  <Section id="specialization" tone="soft" eyebrow="Specialization vs general purpose">
+    <Fragment slot="title">Every AI product streams. The streaming layer was built for <em>something else</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        Chat assistants, copilots, agents and AI search all send their answers word by word. But WebSocket hubs, pub/sub
+        brokers and notification servers were designed to deliver a chat message or a notification now and then.
+      </p>
+      <p>
+        An LLM answer is not like that. It is <em>hundreds of small events, a few dozen milliseconds apart, for ten seconds
+        or more</em>, with pauses while a tool runs and the occasional large payload, for every user at once.
+      </p>
+    </Fragment>
+    <Block lead="Put that traffic through a general-purpose server and three things happen:">
+      <FeatureColumns items={symptoms} />
+    </Block>
+    <Grid min="lg">
+      <Block lead="IQ was built to remove all three. It keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path. Just the shortest possible path from your model to your user’s screen.">
+        <Fragment slot="title">Doing one thing is what makes it <em>fast</em>.</Fragment>
+      </Block>
+      <Block eyebrow="Nothing else">
+        <Chips items={LEFT_OUT} strike />
+      </Block>
+    </Grid>
+  </Section>
+
+  <Section id="benchmark" eyebrow="Benchmark">
+    <Fragment slot="title">How we <em>measured</em>.</Fragment>
+    <Fragment slot="aside">
+      <p>
+        The figures on this page come from IQ’s reproducible benchmark suite, which runs with Docker alone. It streams
+        simulated {RUN.protocol} agent runs through each server, one at a time, on the same CPU and memory limits, and
+        measures the events delivered, the CPU and memory used, the latency each event saw from the moment the model
+        produced it, and the events browsers lost when their connection dropped.
+      </p>
+      <p>
+        Each competitor ran in its fastest documented setup: {MERCURE} with its in-memory transport, and again with its
+        default transport that keeps history; {REVERB} with its recommended event loop and production
+        settings; {SOKETI} with its official image; {listAnd([REVERB_SHORT, SOKETI])} scaled out with Redis on two CPUs, as their
+        documentation describes. Every server checked that each browser was allowed to read the stream it asked for.
+      </p>
+      <p>
+        The results were measured on a single machine (<code>{MACHINE}</code>). Absolute numbers depend on the hardware:
+        compare servers within one run, on one machine.
+      </p>
+    </Fragment>
+  </Section>
+
+  <PageHero
+    variant="cta"
+    lead="Ask us to run the benchmark on your own infrastructure."
+    actions={[
+      { ...CONTACT, variant: 'primary' },
+      { label: 'For cloud providers →', href: PAGES.cloud },
+    ]}
+  >
+    <Fragment slot="title">See the numbers for <em>your environment</em>.</Fragment>
+  </PageHero>
+</BaseLayout>

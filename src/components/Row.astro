@@ -1,0 +1,36 @@
+---
+// Title on the left, content on the right from md up. Use inside Rows.
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="row">
+  <h3>{title}</h3>
+  <div class="row__body">
+    <slot />
+  </div>
+</div>
+
+<style lang="scss">
+  .row {
+    display: grid;
+    gap: var(--s-3) var(--s-8);
+    padding-block: var(--s-6);
+    border-top: 1px solid var(--rule);
+
+    &:first-child {
+      border-top-color: var(--rule-strong);
+    }
+
+    @include up(md) {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+  }
+
+  .row__body {
+    margin-top: 0;
+  }
+</style>

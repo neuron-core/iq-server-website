@@ -1,0 +1,135 @@
+html {
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--fg1);
+  text-wrap: balance;
+}
+
+h1 {
+  max-width: var(--measure-title);
+  font-size: var(--t-h1);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+
+  em {
+    font-weight: var(--weight-regular);
+  }
+}
+
+h2 {
+  font-size: var(--t-h2);
+  letter-spacing: var(--tracking-display);
+}
+
+h3 {
+  font-size: var(--t-h3);
+}
+
+p {
+  max-width: var(--measure-text);
+  color: var(--fg2);
+  text-wrap: pretty;
+
+  em {
+    font-family: var(--font-display);
+    font-size: 1.1em;
+    color: var(--fg1);
+  }
+}
+
+strong {
+  font-weight: var(--weight-medium);
+  color: var(--fg1);
+}
+
+code {
+  padding: 0.12em 0.38em;
+  border-radius: var(--r-sm);
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 0.94em;
+  color: var(--fg1);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  text-underline-offset: var(--s-1);
+  text-decoration-thickness: 1px;
+
+  &:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+  }
+}
+
+blockquote {
+  font-family: var(--font-display);
+  font-size: var(--t-quote);
+  font-style: italic;
+  font-weight: var(--weight-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--fg1);
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: var(--measure-lede);
+  font-family: var(--font-display);
+  font-size: var(--t-lede);
+  font-style: italic;
+  font-weight: var(--weight-light);
+  line-height: var(--lh-snug);
+  color: var(--fg2);
+}
+
+// Mono, uppercase: eyebrows above headings, labels under numbers and around charts.
+.eyebrow,
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--t-eyebrow);
+  font-weight: var(--weight-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+
+.label {
+  font-size: var(--t-micro);
+}
+
+// Flow: the space between consecutive text blocks. Zero specificity, so a component can override it.
+:where(p) + :where(*) {
+  margin-top: var(--s-4);
+}
+
+:where(h3) + :where(*) {
+  margin-top: var(--s-3);
+}
+
+:where(h1, h2) + :where(*) {
+  margin-top: var(--s-5);
+}
+
+:where(.eyebrow) + :where(h1, h2, h3) {
+  margin-top: var(--s-5);
+}

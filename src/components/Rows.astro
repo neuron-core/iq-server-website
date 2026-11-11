@@ -1,0 +1,18 @@
+---
+// A stack of Row components, closed by a bottom rule.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['rows', className]}>
+  <slot />
+</div>
+
+<style lang="scss">
+  .rows {
+    border-bottom: 1px solid var(--rule);
+  }
+</style>
