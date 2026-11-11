@@ -13,7 +13,6 @@ import Section from '../components/Section.astro';
 import Stat from '../components/Stat.astro';
 import DataPath from '../components/home/DataPath.astro';
 import ReplayChart from '../components/home/ReplayChart.astro';
-import SseStream from '../components/home/SseStream.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import {
   COMPETITORS,
@@ -118,7 +117,7 @@ const integration = [
 ---
 
 <BaseLayout
-  title="Stream LLM tokens to the browser"
+  title="Stream LLM tokens"
   description={`${SITE_NAME} is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time.`}
 >
   <PageHero
@@ -134,12 +133,11 @@ const integration = [
       { value: String(LOST_ON_RECONNECT), label: 'Events lost on reconnect' },
     ]}
   >
-    <Fragment slot="title">Stream LLM tokens to the browser. <em>Nothing else.</em> Better than anything else.</Fragment>
+    <Fragment slot="title">Stream LLM tokens. <em>Nothing else.</em> Better than anything else.</Fragment>
     <p>
       It delivers {THROUGHPUT_MULTIPLE} times as many events per CPU as general-purpose real-time servers. When a
       user’s connection drops, IQ picks up exactly where it stopped, and the user never notices.
     </p>
-    <SseStream slot="aside" />
   </PageHero>
 
   <Section
