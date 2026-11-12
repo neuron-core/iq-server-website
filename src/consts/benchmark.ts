@@ -96,13 +96,18 @@ export const TWO_CPUS = {
     reverb: { delivered: 8.6, cpuPerEventUs: 910.5, p99Ms: 24_170 },
     soketi: { delivered: 12, cpuPerEventUs: 635.9, p99Ms: 22_330 },
   },
+  // Only IQ-Stream was tested here: every other server had already fallen behind at 600 runs or fewer.
+  // CPU per event is the 192% of CPU it used over the events it delivered each second.
+  4000: {
+    iq: { delivered: 75, cpuPerEventUs: 15.5, p99Ms: 2_340 },
+  },
 } satisfies Record<number, Load>;
 
 /** IQ-Stream's p99 latency at a load every general-purpose server had already fallen behind on. */
 export const HEADLINE_P99 = { runs: 300, ms: ONE_CPU[300].iq.p99Ms };
 
-/** Rounded. On one CPU: 85,458 events per second, at 2,000 concurrent runs. */
-export const EVENTS_PER_SECOND = { oneCpu: 85_000, twoCpus: 76_000 };
+/** Rounded. One CPU: 85,458 events per second, at 2,000 concurrent runs. Two CPUs: at 4,000. */
+export const EVENTS_PER_SECOND = { oneCpu: 85_000, twoCpus: 124_000 };
 
 /** IQ-Stream relays more than this many times the events per CPU of a general-purpose server. */
 export const THROUGHPUT_MULTIPLE = 14;
