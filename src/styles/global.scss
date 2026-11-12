@@ -19,6 +19,11 @@
   font-display: swap;
 }
 
+// Fragment links scroll the target clear of the sticky header.
+html {
+  scroll-padding-top: var(--header-h);
+}
+
 body {
   background: var(--bg);
   color: var(--fg1);

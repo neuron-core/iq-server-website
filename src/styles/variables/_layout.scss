@@ -18,7 +18,15 @@
   --measure-text: 65ch;
   --measure-note: 32ch;
 
+  // Height of the sticky site header (SiteHeader.astro), so in-page jumps land below it.
+  // Two rows on mobile, one from lg up: keep in step with the header's layout.
+  --header-h: 122px;
+
   @include up(md) {
     --gutter: var(--s-6);
+  }
+
+  @include up(lg) {
+    --header-h: 79px;
   }
 }
