@@ -1,0 +1,18 @@
+---
+// A claim on its own row across the full width, its explanation under it.
+---
+
+<figure class="claim">
+  <blockquote>
+    <slot name="quote" />
+  </blockquote>
+  <slot />
+</figure>
+
+<style lang="scss">
+  .claim {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+</style>

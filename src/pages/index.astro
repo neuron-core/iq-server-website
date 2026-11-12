@@ -2,6 +2,7 @@
 import Block from '../components/Block.astro';
 import Button from '../components/Button.astro';
 import Chips from '../components/Chips.astro';
+import Claim from '../components/Claim.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import FeatureColumns from '../components/FeatureColumns.astro';
 import Grid from '../components/Grid.astro';
@@ -146,7 +147,7 @@ const integration = [
     lead={`${SITE_NAME} is a streaming server specialized in a single task: relaying LLM output from application backends to browsers.`}
   >
     <Fragment slot="title">Doing one thing is what makes it <em>fast</em>.</Fragment>
-    <RuledGrid slot="aside" items={steps} variant="serif" numbered />
+    <RuledGrid slot="aside" items={steps} variant="display" numbered />
     <DataPath />
   </Section>
 
@@ -178,7 +179,7 @@ const integration = [
     <FeatureColumns items={savings} />
     <Block lead={`Replay is only half of it. ${SITE_NAME} also guarantees that every browser learns how the answer ended, even one that reconnects too late.`}>
       <Fragment slot="title">A complete contract for <em>every answer</em>.</Fragment>
-      <RuledGrid items={contract} min="sm" variant="serif" />
+      <RuledGrid items={contract} min="sm" variant="display" />
     </Block>
   </Section>
 
@@ -206,12 +207,12 @@ const integration = [
         </Row>
       </Rows>
     </Block>
-    <Grid min="lg" align="end">
-      <blockquote>General-purpose servers make you choose: speed without replay, or replay without speed.</blockquote>
+    <Claim>
+      <Fragment slot="quote">General-purpose servers make you choose: speed without replay, or replay without speed.</Fragment>
       <Block lead={`${SITE_NAME} keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path: no disk, no database, no broker. That is how it resumes a browser within milliseconds of reconnecting while relaying tens of thousands of events per second.`}>
         <Button href={PAGES.performance}>Specialization vs general purpose →</Button>
       </Block>
-    </Grid>
+    </Claim>
   </Section>
 
   <Section

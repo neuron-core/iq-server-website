@@ -9,13 +9,13 @@ export interface RuledItem {
 interface Props {
   items: RuledItem[];
   min?: 'sm' | 'md' | 'lg';
-  /** Serif titles under a strong rule, or sans titles under a hairline. Numbered lists keep the hairline. */
-  variant?: 'serif' | 'sans';
+  /** Large display titles under a strong rule, or body-size titles under a hairline. Numbered lists keep the hairline. */
+  variant?: 'display' | 'body';
   numbered?: boolean;
   class?: string;
 }
 
-const { items, min = 'md', variant = 'sans', numbered = false, class: className } = Astro.props;
+const { items, min = 'md', variant = 'body', numbered = false, class: className } = Astro.props;
 const List = numbered ? 'ol' : 'ul';
 ---
 
@@ -53,7 +53,7 @@ const List = numbered ? 'ol' : 'ul';
     padding-block: var(--s-5);
     border-top: 1px solid var(--rule);
 
-    .ruled--serif:not(.ruled--numbered) & {
+    .ruled--display:not(.ruled--numbered) & {
       border-top-color: var(--rule-strong);
     }
   }
@@ -65,7 +65,7 @@ const List = numbered ? 'ol' : 'ul';
     line-height: var(--lh-snug);
     letter-spacing: normal;
 
-    .ruled--serif & {
+    .ruled--display & {
       font-family: var(--font-display);
       font-size: var(--t-h4);
       font-weight: var(--weight-regular);
