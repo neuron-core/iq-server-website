@@ -99,11 +99,6 @@ const operations = [
     metrics={[
       { value: `≈ ${formatNumber(RUNS_ON_ONE_CPU)}`, label: 'Concurrent agent runs on one CPU' },
       { value: `< ${GENERAL_PURPOSE_LIMIT}`, label: 'Where general-purpose servers fall behind' },
-      {
-        value: `≈ ${SIZING.iq.vCpus}`,
-        unit: 'vCPUs',
-        label: `For ${formatNumber(SIZING.concurrentRuns)} concurrent runs, against ≈ ${SIZING.generalPurpose.vCpus}`,
-      },
       { value: '0', label: 'Brokers, databases or disks in the data path' },
     ]}
   >
