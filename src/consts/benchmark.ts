@@ -29,7 +29,8 @@ export interface Measure {
   lostPct?: number;
 }
 
-export type Load = Record<ServerKey, Measure>;
+/** Results of one load. Servers that were not tested at it are left out. */
+export type Load = Partial<Record<ServerKey, Measure>>;
 
 /** Below this delivery rate the backlog hides reconnect losses, so they are not reported. */
 export const DELIVERY_THRESHOLD = 90;
@@ -73,6 +74,10 @@ export const ONE_CPU = {
     reverb: { delivered: 5.4, cpuPerEventUs: 428.8, p99Ms: 24_650 },
     soketi: { delivered: 12, cpuPerEventUs: 199.9, p99Ms: 22_330 },
   },
+  // Only IQ was tested here: every other server had already fallen behind at 1,000 runs or fewer.
+  2000: {
+    iq: { delivered: 99.5, cpuPerEventUs: 11.4, p99Ms: 92.6, lostPct: 0 },
+  },
 } satisfies Record<number, Load>;
 
 /** Results by number of concurrent runs, on two CPUs. */
@@ -96,10 +101,11 @@ export const TWO_CPUS = {
 /** IQ's p99 latency at a load every general-purpose server had already fallen behind on. */
 export const HEADLINE_P99 = { runs: 300, ms: ONE_CPU[300].iq.p99Ms };
 
-export const EVENTS_PER_SECOND = { oneCpu: 42_000, twoCpus: 76_000 };
+/** Rounded. On one CPU: 85,458 events per second, at 2,000 concurrent runs. */
+export const EVENTS_PER_SECOND = { oneCpu: 85_000, twoCpus: 76_000 };
 
 /** IQ relays more than this many times the events per CPU of a general-purpose server. */
-export const THROUGHPUT_MULTIPLE = 7;
+export const THROUGHPUT_MULTIPLE = 14;
 
 /** What IQ moved on two CPUs, as a multiple of what each competitor moved. */
 export const TWO_CPU_MULTIPLE = { mercure: 9, soketi: 17, reverb: 35 };

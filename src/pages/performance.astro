@@ -39,7 +39,7 @@ import { formatNumber, listAnd } from '../utils/format';
 
 const oneCpu = formatNumber(EVENTS_PER_SECOND.oneCpu);
 const twoCpus = formatNumber(EVENTS_PER_SECOND.twoCpus);
-const heavyLoad = 1000;
+const heavyLoad = 2000;
 const lightLoad = CPU_ADVANTAGE.atLightLoad.runs;
 const perEvent = (runs: keyof typeof ONE_CPU) => Math.round(ONE_CPU[runs].iq.cpuPerEventUs);
 const memoryPerRun = `${MEMORY.perRunKib.min}–${MEMORY.perRunKib.max}`;
@@ -109,7 +109,7 @@ const symptoms = [
     <Fragment slot="title">What the numbers <em>say</em>.</Fragment>
     <Grid min="sm">
       <Stat value={oneCpu} unit="/s" label="Events relayed on one CPU" accent>
-        A thousand agent runs at once. The best any general-purpose server reached was
+        Two thousand agent runs at once. At half that load, the best any general-purpose server reached was
         about {formatNumber(BEST_GENERAL_PURPOSE_AT_1000.eventsPerSecond)}, with its tokens arriving more
         than {BEST_GENERAL_PURPOSE_AT_1000.secondsLate} seconds late.
       </Stat>

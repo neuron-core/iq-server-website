@@ -6,13 +6,24 @@ interface Props {
   title: string;
   caption: string;
   servers: Record<ServerKey, string>;
-  /** Results keyed by number of concurrent runs. */
+  /** Results keyed by number of concurrent runs. A load may leave out the servers not tested at it. */
   loads: Record<number, Load>;
   class?: string;
 }
 
 const { title, caption, servers, loads, class: className } = Astro.props;
 const keys = Object.keys(servers) as ServerKey[];
+const columns = 4;
+
+const groups = Object.entries(loads).map(([runs, results]) => ({
+  runs: Number(runs),
+  rows: keys.flatMap((key) => {
+    const result = results[key];
+    return result ? [{ key, result }] : [];
+  }),
+}));
+// The heaviest load every server was tested at.
+const lastShared = Math.max(...groups.filter(({ rows }) => rows.length === keys.length).map(({ runs }) => runs));
 
 const decimal = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const cpu = (us: number) => `${decimal.format(us)} µs`;
@@ -40,15 +51,15 @@ const lost = (pct?: number) => (pct === undefined ? '–' : pct === 0 ? '0' : pe
         </tr>
       </thead>
       {
-        Object.entries(loads).map(([runs, results]) => (
-          <tbody>
-            {keys.map((key, index) => {
-              const result = results[key];
-              return (
+        groups.map(({ runs, rows }) => {
+          const untested = rows.length < keys.length;
+          return (
+            <tbody>
+              {rows.map(({ key, result }, index) => (
                 <tr class:list={{ 'is-iq': key === 'iq' }}>
                   {index === 0 && (
-                    <th scope="rowgroup" rowspan={keys.length}>
-                      {formatNumber(Number(runs))}
+                    <th scope="rowgroup" rowspan={rows.length + (untested ? 1 : 0)}>
+                      {formatNumber(runs)}
                     </th>
                   )}
                   <td>{servers[key]}</td>
@@ -57,10 +68,18 @@ const lost = (pct?: number) => (pct === undefined ? '–' : pct === 0 ? '0' : pe
                   <td>{latency(result.p99Ms)}</td>
                   <td>{lost(result.lostPct)}</td>
                 </tr>
-              );
-            })}
-          </tbody>
-        ))
+              ))}
+              {untested && (
+                <tr>
+                  <td class="untested" colspan={columns + 1}>
+                    The other servers were not tested at this load: they had already fallen behind
+                    at {formatNumber(lastShared)} concurrent runs or fewer.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          );
+        })
       }
     </table>
   </div>
@@ -153,6 +172,11 @@ const lost = (pct?: number) => (pct === undefined ? '–' : pct === 0 ? '0' : pe
 
   .is-iq td:first-of-type {
     font-weight: var(--weight-semibold);
+  }
+
+  td.untested {
+    font-size: var(--t-caption);
+    font-style: italic;
   }
 
   .bench__note {

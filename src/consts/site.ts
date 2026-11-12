@@ -9,7 +9,7 @@ export const COVER = {
   type: 'image/png',
   width: 1719,
   height: 901,
-  alt: 'IQ-Stream: Stream LLM tokens. Nothing else. Better than anything else. 42,000 events per second on one CPU, 0 events lost on reconnect.',
+  alt: 'IQ-Stream: Stream LLM tokens. Nothing else. Better than anything else. 85,000 events per second on one CPU, 0 events lost on reconnect.',
 };
 
 export const CONTACT = {
