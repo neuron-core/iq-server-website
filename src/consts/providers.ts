@@ -1,6 +1,6 @@
 import { ONE_CPU, RUN, type Measure } from './benchmark';
 
-/** Concurrent agent runs IQ serves on one CPU. */
+/** Concurrent agent runs IQ-Stream serves on one CPU. */
 export const RUNS_ON_ONE_CPU = 2_000;
 
 /** Concurrent runs before which every general-purpose server falls behind. */

@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://iq-server.dev',
+  site: 'https://iq-stream.dev',
   // A parent's scoped styles reach a child component through its `class` prop.
   scopedStyleStrategy: 'class',
   vite: {

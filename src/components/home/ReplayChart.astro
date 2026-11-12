@@ -31,7 +31,7 @@ const legend: { state: State; label: string }[] = [
   { state: 'replayed', label: 'Replayed from memory on reconnect' },
 ];
 
-const description = `${TOTAL} events of one answer. While the browser is offline, ${missed} events are sent. With a general-purpose server those ${missed} are lost. With IQ they are replayed from memory when the browser reconnects, and the stream continues live.`;
+const description = `${TOTAL} events of one answer. While the browser is offline, ${missed} events are sent. With a general-purpose server those ${missed} are lost. With ${SITE_NAME} they are replayed from memory when the browser reconnects, and the stream continues live.`;
 ---
 
 <figure

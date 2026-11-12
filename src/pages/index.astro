@@ -39,19 +39,19 @@ const historyAtLightLoad = ONE_CPU[lightLoad].mercureHistory;
 const steps = [
   {
     title: 'Publish',
-    text: 'Your backend sends each chunk of model output to IQ as it arrives, over a plain HTTP request, from any language.',
+    text: `Your backend sends each chunk of model output to ${SITE_NAME} as it arrives, over a plain HTTP request, from any language.`,
   },
   {
     title: 'Fan out',
-    text: 'IQ fans it out to the browsers watching that answer over Server-Sent Events, the standard the browser already knows. The built-in <code>EventSource</code> is the whole client.',
+    text: `${SITE_NAME} fans it out to the browsers watching that answer over Server-Sent Events, the standard the browser already knows. The built-in <code>EventSource</code> is the whole client.`,
   },
   {
     title: 'Hold',
-    text: 'While the answer is being generated, IQ keeps it in memory, so any browser that reconnects resumes exactly where it left off, and the user never notices.',
+    text: `While the answer is being generated, ${SITE_NAME} keeps it in memory, so any browser that reconnects resumes exactly where it left off, and the user never notices.`,
   },
   {
     title: 'Let go',
-    text: 'When the answer ends, IQ lets it go. Your backend already has the result. IQ carries it only while it is being written.',
+    text: `When the answer ends, ${SITE_NAME} lets it go. Your backend already has the result. ${SITE_NAME} carries it only while it is being written.`,
   },
 ];
 
@@ -99,11 +99,11 @@ const integration = [
   },
   {
     title: 'Any front-end protocol.',
-    text: `${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}: IQ relays your events exactly as you send them. It never reads or changes what you send.`,
+    text: `${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}: ${SITE_NAME} relays your events exactly as you send them. It never reads or changes what you send.`,
   },
   {
     title: 'Any model, any provider.',
-    text: 'IQ sits after the model, so it works with every LLM, hosted or self-hosted.',
+    text: `${SITE_NAME} sits after the model, so it works with every LLM, hosted or self-hosted.`,
   },
   {
     title: 'Simple, secure tokens.',
@@ -122,7 +122,7 @@ const integration = [
 >
   <PageHero
     eyebrow={`${SITE_NAME} · one job, done properly`}
-    lead="IQ is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time."
+    lead={`${SITE_NAME} is a streaming server built for one job: carrying the tokens of an LLM answer from your application backend to your users’ browsers, in real time.`}
     actions={[
       { ...CONTACT, variant: 'primary' },
       { label: 'See the benchmark →', href: PAGES.performance },
@@ -136,14 +136,14 @@ const integration = [
     <Fragment slot="title">Stream LLM tokens. <br><em>Nothing else.</em> <br>Better than anything else.</Fragment>
     <p>
       It delivers {THROUGHPUT_MULTIPLE} times as many events per CPU as general-purpose real-time servers. When a
-      user’s connection drops, IQ picks up exactly where it stopped, and the user never notices.
+      user’s connection drops, {SITE_NAME} picks up exactly where it stopped, and the user never notices.
     </p>
   </PageHero>
 
   <Section
     id="what"
     eyebrow={`What ${SITE_NAME} is`}
-    lead="IQ is a streaming server specialized in a single task: relaying LLM output from application backends to browsers."
+    lead={`${SITE_NAME} is a streaming server specialized in a single task: relaying LLM output from application backends to browsers.`}
   >
     <Fragment slot="title">Doing one thing is what makes it <em>fast</em>.</Fragment>
     <RuledGrid slot="aside" items={steps} variant="serif" numbered />
@@ -158,9 +158,9 @@ const integration = [
         some of your users will lose their connection mid-stream every day.
       </p>
       <p>
-        With IQ, the browser simply reconnects, and <strong>IQ replays exactly the tokens it missed, then continues
+        With {SITE_NAME}, the browser simply reconnects, and <strong>{SITE_NAME} replays exactly the tokens it missed, then continues
         live</strong>. No gaps, no repeats, nothing for your frontend or backend to rebuild. The browser’s
-        standard <code>EventSource</code> does it on its own: it reconnects and tells IQ the last event it received.
+        standard <code>EventSource</code> does it on its own: it reconnects and tells {SITE_NAME} the last event it received.
       </p>
     </Fragment>
     <ReplayChart />
@@ -176,14 +176,14 @@ const integration = [
   <Section id="why" eyebrow="Why it matters for AI products">
     <Fragment slot="title">What replay <em>saves you</em>.</Fragment>
     <FeatureColumns items={savings} />
-    <Block lead="Replay is only half of it. IQ also guarantees that every browser learns how the answer ended, even one that reconnects too late.">
+    <Block lead={`Replay is only half of it. ${SITE_NAME} also guarantees that every browser learns how the answer ended, even one that reconnects too late.`}>
       <Fragment slot="title">A complete contract for <em>every answer</em>.</Fragment>
       <RuledGrid items={contract} min="sm" variant="serif" />
     </Block>
   </Section>
 
   <Section id="different" tone="soft" eyebrow="Specialized, not general purpose">
-    <Fragment slot="title">Why general-purpose servers can’t do this at IQ <em>speed</em>.</Fragment>
+    <Fragment slot="title">Why general-purpose servers can’t do this at {`${SITE_NAME} `}<em>speed</em>.</Fragment>
     <Block eyebrow="When a browser reconnects mid-answer">
       <Rows>
         <Row title={SITE_NAME}>
@@ -208,7 +208,7 @@ const integration = [
     </Block>
     <Grid min="lg" align="end">
       <blockquote>General-purpose servers make you choose: speed without replay, or replay without speed.</blockquote>
-      <Block lead="IQ keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path: no disk, no database, no broker. That is how it resumes a browser within milliseconds of reconnecting while relaying tens of thousands of events per second.">
+      <Block lead={`${SITE_NAME} keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path: no disk, no database, no broker. That is how it resumes a browser within milliseconds of reconnecting while relaying tens of thousands of events per second.`}>
         <Button href={PAGES.performance}>Specialization vs general purpose →</Button>
       </Block>
     </Grid>
@@ -216,7 +216,7 @@ const integration = [
 
   <Section
     tone="ink"
-    lead="IQ runs as a single process on one CPU, or as a cluster that uses every CPU of the machine, and scales with them."
+    lead={`${SITE_NAME} runs as a single process on one CPU, or as a cluster that uses every CPU of the machine, and scales with them.`}
   >
     <Fragment slot="title">Performance and <em>scalability</em>.</Fragment>
     <Block>
@@ -234,7 +234,7 @@ const integration = [
     <Fragment slot="title">One endpoint. <em>Any language.</em></Fragment>
     <Fragment slot="aside">
       <p>
-        If your backend can make an HTTP request, it can stream through IQ. Publishing is a plain HTTP request with one
+        If your backend can make an HTTP request, it can stream through {SITE_NAME}. Publishing is a plain HTTP request with one
         JSON line per event.
       </p>
       <Chips items={LANGUAGES} note="anything that speaks HTTP" />
@@ -254,7 +254,7 @@ const integration = [
 
   <PageHero
     variant="cta"
-    lead="IQ is the streaming layer AI products should have had from the start: built for tokens, fast on a single CPU, resilient to every dropped connection, and ready to host one app or thousands."
+    lead={`${SITE_NAME} is the streaming layer AI products should have had from the start: built for tokens, fast on a single CPU, resilient to every dropped connection, and ready to host one app or thousands.`}
     actions={[
       { ...CONTACT, variant: 'primary' },
       { label: 'See the benchmark →', href: PAGES.performance },

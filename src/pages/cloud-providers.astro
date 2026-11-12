@@ -62,7 +62,7 @@ const isolation = [
   },
   {
     title: 'Plug into the customer database you already have.',
-    text: `A JSON file, ${listOr(CUSTOMER_STORES)}, or your own internal service through a small connector. A slow or failing store never takes streaming down: IQ caches answers and keeps serving known apps through a store outage.`,
+    text: `A JSON file, ${listOr(CUSTOMER_STORES)}, or your own internal service through a small connector. A slow or failing store never takes streaming down: ${SITE_NAME} caches answers and keeps serving known apps through a store outage.`,
   },
   {
     title: 'Per-app monitoring without sharing secrets.',
@@ -114,7 +114,7 @@ const operations = [
         real-time service per message for traffic it was never designed for.
       </p>
       <p>
-        IQ lets you offer <strong>LLM streaming as a first-class managed service</strong>: a dedicated endpoint your
+        {SITE_NAME} lets you offer <strong>LLM streaming as a first-class managed service</strong>: a dedicated endpoint your
         customers point their backends and browsers at, with replay included and no infrastructure for them to run.
       </p>
     </Fragment>
@@ -124,7 +124,7 @@ const operations = [
     <Fragment slot="title">The same hardware carries several times the <em>customers</em>.</Fragment>
     <Fragment slot="aside">
       <p>
-        A service like this is priced per customer and run per CPU. IQ serves
+        A service like this is priced per customer and run per CPU. {SITE_NAME} serves
         around {formatNumber(RUNS_ON_ONE_CPU)} concurrent agent runs on a single CPU, where general-purpose servers fall
         behind before {GENERAL_PURPOSE_LIMIT}, and the margin per customer grows accordingly.
       </p>
@@ -141,13 +141,13 @@ const operations = [
       throughput when scaled out. Adding replay to it makes things much worse: with history on, it
       costs {HISTORY_CPU_COST} times more CPU per event and could not keep up even with {lightLoad} concurrent runs.
     </CostTable>
-    <ClusterMultiples eyebrow="And it keeps scaling: on the same two CPUs, IQ moved" />
+    <ClusterMultiples eyebrow={`And it keeps scaling: on the same two CPUs, ${SITE_NAME} moved`} />
     <Block eyebrow="Where the savings come from">
       <RuledGrid items={savings} min="sm" variant="serif" />
     </Block>
   </Section>
 
-  <Section id="economics" tone="ink" eyebrow="Why IQ fits a provider’s economics">
+  <Section id="economics" tone="ink" eyebrow={`Why ${SITE_NAME} fits a provider’s economics`}>
     <Fragment slot="title">Built to be run as a <em>service</em>.</Fragment>
     <Rows>
       <Row title="Multi-tenancy is built in, not bolted on.">
@@ -165,7 +165,7 @@ const operations = [
       </Row>
       <Row title="It connects to your platform, not the other way round.">
         <p>
-          IQ looks up customers in the store you already run ({listOr([...CUSTOMER_STORES, 'an internal API'])}) and
+          {SITE_NAME} looks up customers in the store you already run ({listOr([...CUSTOMER_STORES, 'an internal API'])}) and
           caches what it reads. No separate customer database to sync, no extra service to operate.
         </p>
       </Row>
@@ -200,7 +200,7 @@ const operations = [
   <Section id="multi-tenant" eyebrow="Many isolated applications">
     <Fragment slot="title">Many apps that don’t trust each other, on the <em>same servers</em>.</Fragment>
     <p slot="aside">
-      IQ can host the streams of many independent applications, belonging to different teams or different customers, on
+      {SITE_NAME} can host the streams of many independent applications, belonging to different teams or different customers, on
       the same servers, safely.
     </p>
     <RuledGrid items={isolation} />
@@ -209,7 +209,7 @@ const operations = [
         <p class="eyebrow">Single-tenant</p>
         <h3>One company, one or more apps.</h3>
         <p>
-          Run IQ next to your application and give it your app’s credentials. Your backend signs a short-lived token for
+          Run {SITE_NAME} next to your application and give it your app’s credentials. Your backend signs a short-lived token for
           each answer: one to publish, one to watch. The browser gets only the token to watch, and only for that answer.
         </p>
       </Panel>
@@ -227,7 +227,7 @@ const operations = [
   <Section id="operate" tone="soft" eyebrow="Operate it">
     <Fragment slot="title">One Docker image. Running in <em>minutes</em>.</Fragment>
     <p slot="aside">
-      IQ ships as a ready-to-use Docker image for <Fragment set:html={architectures} />. One command starts it. It needs
+      {SITE_NAME} ships as a ready-to-use Docker image for <Fragment set:html={architectures} />. One command starts it. It needs
       no database, no Redis, no disk and no message broker: everything it does happens in memory.
     </p>
     <RuledGrid items={operations} min="lg" />
@@ -236,7 +236,7 @@ const operations = [
   <Section id="faq" eyebrow="FAQ">
     <Fragment slot="title">Questions providers <em>ask first</em>.</Fragment>
     <Rows>
-      <Row title="Can one IQ deployment serve many customers?">
+      <Row title={`Can one ${SITE_NAME} deployment serve many customers?`}>
         <p>
           Yes. Multi-tenancy is built in: separate credentials, separate limits and separate counters for every app, with
           no customer able to read, write or crowd out another’s streams.
@@ -244,18 +244,18 @@ const operations = [
       </Row>
       <Row title="Can I run it in my own cloud?">
         <p>
-          Yes. IQ is a single Docker image for <Fragment set:html={architectures} />, signed and verifiable, that runs
+          Yes. {SITE_NAME} is a single Docker image for <Fragment set:html={architectures} />, signed and verifiable, that runs
           anywhere Docker runs, air-gapped networks included.
         </p>
       </Row>
-      <Row title="Does IQ store our customers’ conversations?">
+      <Row title={`Does ${SITE_NAME} store our customers’ conversations?`}>
         <p>
-          No. IQ keeps an answer in memory only while it is being generated, so a browser that reconnects can resume.
-          Once the answer ends and the browsers watching it have read it, IQ drops it. It never writes content to disk and
+          No. {SITE_NAME} keeps an answer in memory only while it is being generated, so a browser that reconnects can resume.
+          Once the answer ends and the browsers watching it have read it, {SITE_NAME} drops it. It never writes content to disk and
           never logs it.
         </p>
       </Row>
-      <Row title="What happens if IQ restarts mid-answer?">
+      <Row title={`What happens if ${SITE_NAME} restarts mid-answer?`}>
         <p>
           Answers in flight on that process are lost, and browsers are told so explicitly, so the app can load the result
           from its backend. Planned restarts drain gracefully: running answers get time to finish first.

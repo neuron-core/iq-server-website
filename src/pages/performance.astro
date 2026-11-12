@@ -69,7 +69,7 @@ const symptoms = [
 >
   <PageHero
     eyebrow="Performance and scalability"
-    lead="IQ was benchmarked against three of the best-known real-time servers on the exact traffic an AI product generates."
+    lead={`${SITE_NAME} was benchmarked against three of the best-known real-time servers on the exact traffic an AI product generates.`}
     actions={[
       { ...CONTACT, variant: 'primary' },
       { label: 'How we measured →', href: '#benchmark' },
@@ -99,7 +99,7 @@ const symptoms = [
       <p><strong>Each server ran alone, on the same CPU and memory, in its fastest configuration.</strong></p>
     </Fragment>
     <AgentRun />
-    <BenchmarkTable title="One CPU" caption={`IQ vs ${COMPETITORS.join(', ')}`} servers={ONE_CPU_SERVERS} loads={ONE_CPU}>
+    <BenchmarkTable title="One CPU" caption={`${SITE_NAME} vs ${COMPETITORS.join(', ')}`} servers={ONE_CPU_SERVERS} loads={ONE_CPU}>
       “Lost on reconnect” is left out (–) for servers that delivered under {DELIVERY_THRESHOLD}%: that far behind, the
       backlog hides it.
     </BenchmarkTable>
@@ -114,15 +114,15 @@ const symptoms = [
         than {BEST_GENERAL_PURPOSE_AT_1000.secondsLate} seconds late.
       </Stat>
       <Stat value={String(HEADLINE_P99.ms)} unit="ms" label={`p99 latency at ${HEADLINE_P99.runs} runs`}>
-        None of the general-purpose servers keeps up with {HEADLINE_P99.runs} concurrent runs. IQ delivers every event.
+        None of the general-purpose servers keeps up with {HEADLINE_P99.runs} concurrent runs. {SITE_NAME} delivers every event.
       </Stat>
       <Stat value={`${CPU_ADVANTAGE.atLightLoad.min}×`} label={`Less CPU per event at ${lightLoad} runs`}>
-        Where two of them still keep up, IQ uses {CPU_ADVANTAGE.atLightLoad.min} to {CPU_ADVANTAGE.atLightLoad.max} times
+        Where two of them still keep up, {SITE_NAME} uses {CPU_ADVANTAGE.atLightLoad.min} to {CPU_ADVANTAGE.atLightLoad.max} times
         less CPU per event, with a p99 under one millisecond
         against {ONE_CPU[lightLoad].mercure.p99Ms} and {ONE_CPU[lightLoad].soketi.p99Ms} ms.
       </Stat>
       <Stat value={String(perEvent(heavyLoad))} unit="µs" label={`Per event at ${formatNumber(heavyLoad)} runs`}>
-        IQ gets cheaper per event as it gets busier, from {perEvent(lightLoad)} µs to {perEvent(heavyLoad)} µs, because
+        {SITE_NAME} gets cheaper per event as it gets busier, from {perEvent(lightLoad)} µs to {perEvent(heavyLoad)} µs, because
         each turn of its event loop relays more events at once.
       </Stat>
     </Grid>
@@ -131,7 +131,7 @@ const symptoms = [
   <Section id="cluster" eyebrow="Scalability">
     <Fragment slot="title">From one CPU to <em>every CPU</em> of the machine.</Fragment>
     <p slot="aside">
-      IQ runs as a single process on one CPU, or as a cluster that uses every CPU of the machine: one worker per CPU,
+      {SITE_NAME} runs as a single process on one CPU, or as a cluster that uses every CPU of the machine: one worker per CPU,
       with a lightweight router in front. Each answer lives on one worker, so its tokens go straight from your backend
       to your users’ browsers, never crossing processes and never passing through a broker.
     </p>
@@ -143,7 +143,7 @@ const symptoms = [
     />
     <Grid min="lg">
       <div>
-        <h3>IQ scales with its CPUs.</h3>
+        <h3>{SITE_NAME} scales with its CPUs.</h3>
         <p>
           On two CPUs it delivered about {twoCpus} events per second, while its cost per event stayed the same as on one.
         </p>
@@ -158,16 +158,16 @@ const symptoms = [
         </p>
       </div>
     </Grid>
-    <ClusterMultiples eyebrow="On the same two CPUs, IQ moved" />
+    <ClusterMultiples eyebrow={`On the same two CPUs, ${SITE_NAME} moved`} />
     <Panel>
       <Grid min="lg">
         <div>
           <p class="eyebrow">Memory</p>
           <h3>Light on <em>memory</em>.</h3>
           <p>
-            A whole agent run, kept in full so any browser can resume it, costs IQ about {memoryPerRun} KiB.
+            A whole agent run, kept in full so any browser can resume it, costs {SITE_NAME} about {memoryPerRun} KiB.
             A {MEMORY.containerGb} GB container holds about {formatNumber(MEMORY.answers)} complete {formatNumber(MEMORY.tokensPerAnswer)}-token
-            answers in flight at once. IQ sizes itself from its container’s
+            answers in flight at once. {SITE_NAME} sizes itself from its container’s
             memory limit and refuses new work before it runs out, so a traffic spike never crashes the process and the
             answers already running.
           </p>
@@ -199,7 +199,7 @@ const symptoms = [
       <FeatureColumns items={symptoms} />
     </Block>
     <Grid min="lg">
-      <Block lead="IQ was built to remove all three. It keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path. Just the shortest possible path from your model to your user’s screen.">
+      <Block lead={`${SITE_NAME} was built to remove all three. It keeps every running answer in memory, for as long as it is being written and no longer, so replay costs nothing on the hot path. Just the shortest possible path from your model to your user’s screen.`}>
         <Fragment slot="title">Doing one thing is what makes it <em>fast</em>.</Fragment>
       </Block>
       <Block eyebrow="Nothing else">
@@ -212,7 +212,7 @@ const symptoms = [
     <Fragment slot="title">How we <em>measured</em>.</Fragment>
     <Fragment slot="aside">
       <p>
-        The figures on this page come from IQ’s reproducible benchmark suite, which runs with Docker alone. It streams
+        The figures on this page come from {SITE_NAME}’s reproducible benchmark suite, which runs with Docker alone. It streams
         simulated {RUN.protocol} agent runs through each server, one at a time, on the same CPU and memory limits, and
         measures the events delivered, the CPU and memory used, the latency each event saw from the moment the model
         produced it, and the events browsers lost when their connection dropped.

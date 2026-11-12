@@ -26,8 +26,8 @@ export const GET: APIRoute = ({ site }) => {
 > ${SITE_SUMMARY}
 
 - Your backend publishes each chunk of model output over a plain HTTP request, one JSON line per event, from any language: ${listAnd(LANGUAGES)}, or anything that speaks HTTP.
-- Browsers read the stream with the built-in EventSource, with no SDK. IQ relays events exactly as sent, so it works with ${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}.
-- Replay: IQ keeps each answer in memory while it is being written. A browser that reconnects resumes from the exact event it missed. ${LOST_ON_RECONNECT} events were lost on reconnect in the benchmark.
+- Browsers read the stream with the built-in EventSource, with no SDK. ${SITE_NAME} relays events exactly as sent, so it works with ${listOr([...FRONTEND_PROTOCOLS, 'your own format'])}.
+- Replay: ${SITE_NAME} keeps each answer in memory while it is being written. A browser that reconnects resumes from the exact event it missed. ${LOST_ON_RECONNECT} events were lost on reconnect in the benchmark.
 - Performance: ${formatNumber(EVENTS_PER_SECOND.oneCpu)} events per second on one CPU, ${formatNumber(EVENTS_PER_SECOND.twoCpus)} on two, and a p99 latency of ${HEADLINE_P99.ms} ms at ${HEADLINE_P99.runs} concurrent agent runs: more than ${THROUGHPUT_MULTIPLE}× the throughput of general-purpose servers (${listAnd(COMPETITORS)}) on the same CPU.
 - Multi-tenant: separate credentials, limits and live counters for every app on the same servers.
 - One Docker image for ${listAnd(ARCHITECTURES)}. No database, no Redis, no disk and no message broker.
